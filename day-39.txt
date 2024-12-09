@@ -1,0 +1,84 @@
+QUESTION..
+
+Essential List (Practical) 
+1 Create a function to return employee name whose salary is above 50000 from the 
+EmployeeInformation table.
+
+
+ANSWER...
+
+
+SQL> CREATE OR REPLACE FUNCTION GetEmployeeNameAboveSalary (
+  2      min_salary IN NUMBER
+  3  ) RETURN VARCHAR2 AS
+  4      emp_name VARCHAR2(100);
+  5  BEGIN
+  6      SELECT Emp_Name
+  7      INTO emp_name
+  8      FROM EmployeeInformation1
+  9      WHERE Emp_Salary > min_salary
+ 10      AND ROWNUM = 1; -- Return the first employee found
+ 11
+ 12      RETURN emp_name; -- Return the employee name
+ 13  EXCEPTION
+ 14      WHEN NO_DATA_FOUND THEN
+ 15          RETURN 'No employee found';s
+ 16      WHEN OTHERS THEN
+ 17          RETURN 'An error occurred: ' || SQLERRM;
+ 18  END GetEmployeeNameAboveSalary;
+ 19  /
+
+Function created.
+
+SQL> DECLARE
+  2      employee_name VARCHAR2(100); 
+  3  BEGIN
+  4      employee_name := GetEmployeeNameAboveSalary(50000); 
+employee with salary above 50,000
+  5      DBMS_OUTPUT.PUT_LINE('Employee Name: ' || employee_name);
+  6  END;
+  7  /
+Employee Name: No employee found
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+Desirable List (Practical) 
+1 Create a function which returns total number of female employees from employee table
+
+ANSWER...
+
+
+
+SQL> CREATE OR REPLACE FUNCTION CountFemaleEmployees
+  2  RETURN NUMBER AS
+  3      female_count NUMBER;
+  4  BEGIN
+  5      SELECT COUNT(*)
+  6      INTO female_count
+  7      FROM emp66
+  8      WHERE GENDER = 'F';
+  9
+ 10      RETURN female_count;
+ 11  EXCEPTION
+ 12      WHEN OTHERS THEN
+ 13          RETURN 0;
+ 14  END CountFemaleEmployees;
+ 15  /
+
+Function created.
+
+SQL>
+SQL> DECLARE
+  2      total_females NUMBER;
+  3  BEGIN
+  4      total_females := CountFemaleEmployees();
+  5      DBMS_OUTPUT.PUT_LINE('Total Female Employees: ' || total_females);
+  6  END;
+  7  /
+Total Female Employees: 2
+
+PL/SQL procedure successfully completed.

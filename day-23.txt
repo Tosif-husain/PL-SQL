@@ -1,0 +1,81 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Use following tables and write below given PL/SQL blocks.  
+PRODUCTS (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)  
+ORDER_DETAILS (OrderDetail_ID, Order_ID, Prod_Id, Quantity) 
+iii. Write a PLSQL block to delete the products of Cat_Id = 3 
+iv.  Write a PLSQL block to insert any product whose cat_id = 3 
+v. Write a PLSQL block to display Supplier_Id and their total number of products they 
+supply.
+
+
+ANSWER...
+
+
+SQL> BEGIN
+  2      DELETE FROM PRODUCTS2
+  3      WHERE Cat_ID = 3;
+  4
+  5      COMMIT;
+  6
+  7      DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT || ' products deleted with Cat_ID = 3.');
+  8  EXCEPTION
+  9      WHEN OTHERS THEN
+ 10          ROLLBACK;
+ 11          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 12  END;
+ 13  /
+0 products deleted with Cat_ID = 3.
+
+PL/SQL procedure successfully completed.
+
+
+SQL> BEGIN
+  2      INSERT INTO PRODUCTS2 (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)
+  3      VALUES (5, 'Product E', 105, 3, 'kg', 18);
+  4
+  5      COMMIT;
+  6
+  7      DBMS_OUTPUT.PUT_LINE('Product inserted successfully with Cat_ID = 3.');
+  8  EXCEPTION
+  9      WHEN OTHERS THEN
+ 10          ROLLBACK;
+ 11          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 12  END;
+ 13  /
+Product inserted successfully with Cat_ID = 3.
+
+PL/SQL procedure successfully completed.
+
+
+SQL> DECLARE
+  2      CURSOR supplier_cursor IS
+  3          SELECT Supplier_ID, COUNT(*) AS Total_Products
+  4          FROM PRODUCTS2
+  5          GROUP BY Supplier_ID;
+  6      v_supplier_id NUMBER;
+  7      v_total_products NUMBER;
+  8  BEGIN
+  9      OPEN supplier_cursor;
+ 10      LOOP
+ 11          FETCH supplier_cursor INTO v_supplier_id, v_total_products;
+ 12          EXIT WHEN supplier_cursor%NOTFOUND;
+ 13          DBMS_OUTPUT.PUT_LINE('Supplier ID: ' || v_supplier_id || ', Total Products: ' || v_total_products);
+ 14      END LOOP;
+ 15      CLOSE supplier_cursor;
+ 16  EXCEPTION
+ 17      WHEN OTHERS THEN
+ 18          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 19  END;
+ 20  /
+Supplier ID: 101, Total Products: 1
+Supplier ID: 102, Total Products: 1
+Supplier ID: 103, Total Products: 1
+Supplier ID: 104, Total Products: 1
+Supplier ID: 105, Total Products: 1
+
+PL/SQL procedure successfully completed.
+
+

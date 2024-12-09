@@ -1,0 +1,25 @@
+The Generic PL/SQL Block
+
+The Declare Section - DECLARE
+
+Code blocks start with a declaration section, in which memory variables and
+other oracle objects can be declared, and if required initialized.
+Once declared, they can be used in SQL statements for data manipulation.
+---Declaration of memory variables, constants, cursors etc. in PL/SQL
+
+The Begin Section - BEGIN
+
+It consists of a set of SQL and PL/SQL statements which describe processes that
+have to be applied to table data. Actual data manipulation, looping and branching constructs
+are specified in this section.
+---SQL and PL/SQL executable statements
+
+The Exception Section - EXCEPTION
+
+This section deals with handling of errors that arise during execution of the data
+manipulation statements, which make up the PL/SQL code block. Errors can arise due to
+syntax, logic and/or validation rule violation.
+
+The End Section - END
+
+This marks the end of a PL/SQL block.

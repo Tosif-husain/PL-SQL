@@ -1,0 +1,89 @@
+Implement the named procedure which takes input city and displays all customers  
+& salespeople of that city ;
+**********************************************************************************
+SQL> create table customers(c_id number(2),cname varchar2(20),city varchar2(20));
+
+Table created.
+
+SQL> create table salespeople(s_id number(2),sname varchar2(20),city varchar2(20));
+
+Table created.
+
+SQL> select *from customers;
+
+      C_ID CNAME                CITY
+---------- -------------------- --------------------
+         1 Ruchita              London
+         2 Komal                London
+         3 Shalin               Berlin
+
+SQL> select *from salespeople;
+
+      S_ID SNAME                CITY
+---------- -------------------- --------------------
+         1 Jigar                London
+         2 Palash               London
+         3 Aaditya              Berlin
+
+**********************************************************************************
+Solution:
+**********************************************************************************
+create or replace procedure proce (temp_city in varchar2) is
+     cursor cur_cust is select cname from customers
+                where upper(city) = upper(temp_city) ;
+     cursor cur_sale is select sname from salespeople where
+                 upper(city)=upper(temp_city);
+
+/*variable to store customer name...*/
+ cust_name customers.cname%type;
+
+/*variable for sales man...*/
+sale_name salespeople.sname%type; 
+
+begin    	 /*(.........begin for procedure....)*/
+
+    dbms_output.put_line('the customers in city '||temp_city||' are');
+    		dbms_output.put_line('*******************************************');
+    open cur_cust;
+            if cur_cust%isopen then
+                    loop
+                            fetch cur_cust into cust_name;
+                            exit when cur_cust%notfound;
+                            dbms_output.put_line(rpad(cust_name,15));
+                    end loop;
+            else
+                    dbms_output.put_line('customer cursor not opened..!!!');
+            end if;
+    		close cur_cust;
+    dbms_output.put_line('the sales person in city '||temp_city||' are');
+    		dbms_output.put_line('*******************************************');
+    open cur_sale;
+            if cur_sale%isopen then
+                    loop
+                            fetch cur_sale into sale_name;
+                            exit when cur_sale%notfound;
+                            dbms_output.put_line(rpad(sale_name,15));
+                    end loop;
+            else
+                    dbms_output.put_line('sales cursor not opened..!!!');
+            end if;
+    		close cur_sale;
+
+end;			/* end of procedure....*/
+**********************************************************************************
+Output:
+**********************************************************************************
+SQL> /
+Procedure created.
+**********************************************************************************
+SQL> call proce('London');
+the customers in city London are
+*******************************************
+Ruchita
+Komal
+the sales person in city London are
+*******************************************
+Jigar
+Palash
+
+Call completed.

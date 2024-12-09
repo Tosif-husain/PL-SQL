@@ -1,0 +1,87 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create table: 
+EmployeeInformation: (Emp_No. , Emp_Name , Emp_Dept. , Emp_Salary) 
+In employee information table write PLSQL block to retrieve the details of those employee whose 
+salary is more than 20000 using explicit cursor. 
+
+
+ANSWER...
+
+SQL>
+
+
+     DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT Emp_No, Emp_Name, Emp_Dept, Emp_Salary
+  4          FROM EmployeeInformation1
+  5          WHERE Emp_Salary > 20000;
+  6
+  7      v_Emp_No EmployeeInformation.Emp_No%TYPE;
+  8      v_Emp_Name EmployeeInformation.Emp_Name%TYPE;
+  9      v_Emp_Dept EmployeeInformation.Emp_Dept%TYPE;
+ 10      v_Emp_Salary EmployeeInformation.Emp_Salary%TYPE;
+ 11  BEGIN
+ 12      OPEN emp_cursor;
+ 13      LOOP
+ 14          FETCH emp_cursor INTO v_Emp_No, v_Emp_Name, v_Emp_Dept, v_Emp_Salary;
+ 15          EXIT WHEN emp_cursor%NOTFOUND;
+ 16          DBMS_OUTPUT.PUT_LINE('Emp_No: ' || v_Emp_No || ', Emp_Name: ' || v_Emp_Name || ', Emp_Dept: ' || v_Emp_Dept || ', Emp_Salary: ' || v_Emp_Salary);
+ 17      END LOOP;
+ 18      CLOSE emp_cursor;
+ 19  END;
+ 20  /
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> /
+Emp_No: 101, Emp_Name: John Doe, Emp_Dept: HR, Emp_Salary: 25000
+Emp_No: 103, Emp_Name: Emily Davis, Emp_Dept: IT, Emp_Salary: 30000
+Emp_No: 104, Emp_Name: Michael Brown, Emp_Dept: Marketing, Emp_Salary: 22000
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+
+Desirable List (Practical (Practical) 
+1 Using explicit cursor retrieves the records of first 5 employees one by one from employee 
+information table. 
+
+
+ANSWER...
+
+
+
+SQL> DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT Emp_No, Emp_Name, Emp_Dept, Emp_Salary
+  4          FROM EmployeeInformation1
+  5          WHERE ROWNUM <= 5;
+  6
+  7      v_Emp_No EmployeeInformation1.Emp_No%TYPE;
+  8      v_Emp_Name EmployeeInformation1.Emp_Name%TYPE;
+  9      v_Emp_Dept EmployeeInformation1.Emp_Dept%TYPE;
+ 10      v_Emp_Salary EmployeeInformation1.Emp_Salary%TYPE;
+ 11  BEGIN
+ 12      OPEN emp_cursor;
+ 13      LOOP
+ 14          FETCH emp_cursor INTO v_Emp_No, v_Emp_Name, v_Emp_Dept, v_Emp_Salary;
+ 15          EXIT WHEN emp_cursor%NOTFOUND;
+ 16          DBMS_OUTPUT.PUT_LINE('Emp_No: ' || v_Emp_No || ', Emp_Name: ' || v_Emp_Name || ', Emp_Dept: ' || v_Emp_Dept || ', Emp_Salary: ' || v_Emp_Salary);
+ 17      END LOOP;
+ 18      CLOSE emp_cursor;
+ 19  END;
+ 20  /
+Emp_No: 101, Emp_Name: John Doe, Emp_Dept: HR, Emp_Salary: 25000
+Emp_No: 102, Emp_Name: Jane Smith, Emp_Dept: Finance, Emp_Salary: 18000
+Emp_No: 103, Emp_Name: Emily Davis, Emp_Dept: IT, Emp_Salary: 30000
+Emp_No: 104, Emp_Name: Michael Brown, Emp_Dept: Marketing, Emp_Salary: 22000
+Emp_No: 105, Emp_Name: Sarah Wilson, Emp_Dept: IT, Emp_Salary: 19000
+
+PL/SQL procedure successfully completed.

@@ -1,0 +1,43 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Use following tables and write below given PL/SQL blocks.  
+PRODUCTS (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)  
+ORDER_DETAILS (OrderDetail_ID, Order_ID, Prod_Id, Quantity) 
+i. Write a pl/sql block to add record twice in database using basic loop and while loop.
+
+
+ANSWER...
+
+
+
+
+SQL> DECLARE
+  2      v_prod_id NUMBER := 6;  -- New Product ID
+  3      v_prod_name VARCHAR2(100) := 'Product F';
+  4      v_supplier_id NUMBER := 106;
+  5      v_cat_id NUMBER := 1;
+  6      v_unit VARCHAR2(50) := 'kg';
+  7      v_price NUMBER := 22;
+  8  BEGIN
+  9      FOR i IN 1..2 LOOP
+ 10          INSERT INTO PRODUCTS2 (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)
+ 11          VALUES (v_prod_id, v_prod_name, v_supplier_id, v_cat_id, v_unit, v_price);
+ 12      END LOOP;
+ 13
+ 14      COMMIT;
+ 15
+ 16      DBMS_OUTPUT.PUT_LINE('Record inserted twice using FOR loop.');
+ 17  EXCEPTION
+ 18      WHEN OTHERS THEN
+ 19          ROLLBACK;
+ 20          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 21  END;
+ 22  /
+An error occurred: ORA-00001: unique constraint (SYSTEM.SYS_C008334) violated
+
+PL/SQL procedure successfully completed.
+
+
+

@@ -1,0 +1,11 @@
+ DECLARE
+  temp emp.eno%type;
+  temp1 emp%rowtype;
+ BEGIN
+ temp:=&temp;
+  SELECT * into temp1 FROM emp WHERE eno=temp;
+ dbms_output.put_line(temp1.eno||temp1.ename);
+ EXCEPTION
+  WHEN no_data_found THEN
+   dbms_output.put_line('Table is not having data');
+ END;

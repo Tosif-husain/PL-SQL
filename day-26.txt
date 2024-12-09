@@ -1,0 +1,33 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write PL/SQL block to increase the salary by 15 %( Rs. 1000) for all Employees in emp table. 
+(Use Cursor) 
+
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2    CURSOR emp_cursor IS
+  3      SELECT EMPNO, SAL FROM EMP4;
+  4    v_empno EMP4.EMPNO%TYPE;
+  5    v_sal EMP4.SAL%TYPE;
+  6  BEGIN
+  7    OPEN emp_cursor;
+  8    LOOP
+  9      FETCH emp_cursor INTO v_empno, v_sal;
+ 10      EXIT WHEN emp_cursor%NOTFOUND;
+ 11
+ 12      UPDATE EMP4
+ 13      SET SAL = v_sal + (v_sal * 0.15) + 1000
+ 14      WHERE EMPNO = v_empno;
+ 15    END LOOP;
+ 16    CLOSE emp_cursor;
+ 17    COMMIT;
+ 18  END;
+ 19  /
+
+PL/SQL procedure successfully completed.

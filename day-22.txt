@@ -1,0 +1,69 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Use following tables and write below given PL/SQL blocks.  
+PRODUCTS (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)  
+ORDER_DETAILS (OrderDetail_ID, Order_ID, Prod_Id, Quantity) 
+  
+i. Write a PLSQL block to display total number of products ordered in Order_ID = 3 
+ii.  Write a PLSQL block to update the price (actual price + 5) of product with Id = 2
+
+
+ANSWER...
+
+
+PL/SQL procedure successfully completed.
+
+SQL> DECLARE
+  2      v_total_quantity NUMBER;
+  3  BEGIN
+  4      SELECT SUM(Quantity)
+  5      INTO v_total_quantity
+  6      FROM ORDER_DETAILS
+  7      WHERE Order_ID = 3;
+  8
+  9      DBMS_OUTPUT.PUT_LINE('Total number of products ordered in Order_ID = 3: ' || NVL(v_total_quantity, 0));
+ 10  EXCEPTION
+ 11      WHEN NO_DATA_FOUND THEN
+ 12          DBMS_OUTPUT.PUT_LINE('No products found for Order_ID = 3.');
+ 13      WHEN OTHERS THEN
+ 14          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 15  END;
+ 16  /
+Total number of products ordered in Order_ID = 3: 0
+
+PL/SQL procedure successfully completed.
+
+
+SQL> BEGIN
+  2      UPDATE PRODUCTS2
+  3      SET Price = Price + 5
+  4      WHERE Prod_ID = 2;
+  5
+  6      COMMIT;
+  7
+  8      IF SQL%ROWCOUNT > 0 THEN
+  9          DBMS_OUTPUT.PUT_LINE('Price updated successfully for Product ID = 2.');
+ 10      ELSE
+ 11          DBMS_OUTPUT.PUT_LINE('No product found with Product ID = 2.');
+ 12      END IF;
+ 13  EXCEPTION
+ 14      WHEN OTHERS THEN
+ 15          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 16  END;
+ 17  /
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> /
+No product found with Product ID = 2.
+
+PL/SQL procedure successfully completed.
+
+SQL>
+
+
+
+

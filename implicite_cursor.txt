@@ -1,0 +1,13 @@
+Example showing implicit cursor
+       begin
+       update employee
+            set basic=basic+100
+         where eno=&eno;
+    if sql%found then
+        dbms_output.put_line(‘record updated’);
+     else
+       dbms_output.put_line(‘record not found’);
+    end if;
+
+
+

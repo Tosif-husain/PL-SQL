@@ -1,0 +1,99 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create a procedure which gets the name of the employee when the employee id is passed 
+using IN and OUT parameter. 
+
+
+ANSWER...
+
+
+SQL> CREATE OR REPLACE PROCEDURE GetEmployeeName (
+  2      p_emp_id IN NUMBER,
+  3      p_emp_name OUT VARCHAR2
+  4  ) AS
+  5  BEGIN
+  6      SELECT ENAME
+  7      INTO p_emp_name
+  8      FROM EMP4
+  9      WHERE EMPNO = p_emp_id;
+ 10
+ 11      IF p_emp_name IS NULL THEN
+ 12          p_emp_name := 'Employee not found';
+ 13      END IF;
+ 14  EXCEPTION
+ 15      WHEN NO_DATA_FOUND THEN
+ 16          p_emp_name := 'Employee not found';
+ 17      WHEN OTHERS THEN
+ 18          p_emp_name := 'An error occurred: ' || SQLERRM;
+ 19  END GetEmployeeName;
+ 20  /
+
+Procedure created.
+
+SQL> DECLARE
+  2      emp_name VARCHAR2(50); -- Variable to hold the employee name
+  3  BEGIN
+  4      GetEmployeeName(7839, emp_name); -- Replace 7839 with the desired employee ID
+  5      DBMS_OUTPUT.PUT_LINE('Employee Name: ' || emp_name);
+  6  END;
+  7  /
+Employee Name: KING
+
+PL/SQL procedure successfully completed.
+
+
+
+QUESTION...
+
+
+Desirable List (Practical) 
+1 Create a procedure to that takes as input the department number and passes two output 
+parameters-one giving the total number of employees in that department and the other giving 
+the maximum salary in that department 
+
+
+ANSWER...
+
+
+SQL> CREATE OR REPLACE PROCEDURE GetDepartmentStats (
+  2      p_dept_no IN NUMBER,
+  3      p_total_employees OUT NUMBER,
+  4      p_max_salary OUT NUMBER
+  5  ) AS
+  6  BEGIN
+  7      SELECT COUNT(*), MAX(SAL)
+  8      INTO p_total_employees, p_max_salary
+  9      FROM emp4
+ 10      WHERE DEPTNO = p_dept_no;
+ 11
+ 12      IF p_total_employees = 0 THEN
+ 13          p_max_salary := NULL; -- No employees in the department
+ 14      END IF;
+ 15
+ 16  EXCEPTION
+ 17      WHEN NO_DATA_FOUND THEN
+ 18          p_total_employees := 0;
+ 19          p_max_salary := NULL;
+ 20      WHEN OTHERS THEN
+ 21          p_total_employees := 0;
+ 22          p_max_salary := NULL;
+ 23  END GetDepartmentStats;
+ 24  /
+
+Procedure created.
+
+SQL> DECLARE
+  2      total_employees NUMBER;
+  3      max_salary NUMBER;      
+  4  BEGIN
+  5      GetDepartmentStats(10, total_employees, max_salary); -- Replace 10 with the desired department number
+  6      DBMS_OUTPUT.PUT_LINE('Total Employees in Department 10: ' || total_employees);
+  7      DBMS_OUTPUT.PUT_LINE('Maximum Salary in Department 10: ' || NVL(max_salary, 0));
+  8  END;
+  9  /
+Total Employees in Department 10: 2
+Maximum Salary in Department 10: 11588.41
+
+PL/SQL procedure successfully completed.

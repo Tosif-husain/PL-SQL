@@ -1,0 +1,61 @@
+					QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to print the total number of employees working as ‘manager’ in previously 
+done query.
+
+
+					ANSWER...
+
+
+SQL> DECLARE
+  2      v_manager_count NUMBER;
+  3  BEGIN
+  4      SELECT COUNT(*)
+  5      INTO v_manager_count
+  6      FROM EMP3
+  7      WHERE job = 'MANAGER';
+  8
+  9      DBMS_OUTPUT.PUT_LINE('Total number of employees working as Manager: ' || v_manager_count);
+ 10  END;
+ 11  /
+Total number of employees working as Manager: 2
+
+PL/SQL procedure successfully completed.
+
+
+					QUESTION...
+
+
+Desirable List (Practical): 
+1 Using above table Solve following queries.  
+1.  Write a pl/sql block to display all employee whose name start with ‘j’.
+
+
+					ANSWER...
+
+
+SQL> DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT ename
+  4          FROM EMP3
+  5          WHERE ename LIKE 'J%';
+  6      emp_name EMP3.ename%TYPE;
+  7  BEGIN
+  8      OPEN emp_cursor;
+  9      LOOP
+ 10          FETCH emp_cursor INTO emp_name;
+ 11          EXIT WHEN emp_cursor%NOTFOUND;
+ 12          DBMS_OUTPUT.PUT_LINE('Employee Name: ' || emp_name);
+ 13      END LOOP;
+ 14      CLOSE emp_cursor;
+ 15  END;
+ 16  /
+Employee Name: JONES
+Employee Name: JAMES
+Employee Name: JACKSON
+
+PL/SQL procedure successfully completed.
+
+

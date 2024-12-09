@@ -1,0 +1,75 @@
+					QUESTION...
+
+Essential List (Practical) 
+Desirable List (Practical): 
+. Display all the records of EMP table  
+ Display all the records of DEPT table  
+www.ljku.edu.in July-Dec2024 
+ 
+ 
+ Display only Name of all employees  
+ Display Employee’s Name and salary  
+Display only unique departments (deptno) from EMP table
+
+
+					ANSWER...
+
+
+SELECT * FROM EMP;
+
+SELECT * FROM DEPT;
+
+SELECT EMP_NAME FROM EMP;
+
+SELECT EMP_NAME, SALARY FROM EMP;
+
+SELECT DISTINCT DEPT_ID FROM EMP;
+
+
+SQL> SELECT * FROM EMP;
+
+EMP_NAME                 EMP_ID     PRICE1     PRICE2      TOTAL
+-------------------- ---------- ---------- ---------- ----------
+tosif                       101      10000      20000      30000
+yasin                       102       1000       2000
+arman                       103      10002      10003
+
+SQL>
+SQL> SELECT * FROM DEPT;
+
+   DEPT_ID DEPT_NAME            LOCATION
+---------- -------------------- --------------------
+         1 bca                  sanand
+         2 mca                  gomtipur
+         3 msc_it               jamshedpur
+       101 Sales                New York
+
+
+SQL> SELECT EMP_NAME FROM EMP;
+
+EMP_NAME
+--------------------
+tosif
+yasin
+arman
+
+
+SQL> SELECT EMP_NAME, TOTAL FROM EMP;
+
+EMP_NAME                  TOTAL
+-------------------- ----------
+tosif                     30000
+yasin
+arman
+
+SQL>
+
+
+SQL> SELECT DISTINCT DEPT_ID FROM EMP;
+
+   DEPT_ID
+----------
+         1
+         2
+         3
+       101

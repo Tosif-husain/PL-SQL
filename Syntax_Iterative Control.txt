@@ -1,0 +1,46 @@
+1) Simple Loop
+
+In simple loop, the keyword loop should be 
+placed before the first statement
+in the sequence and keyword end loop 
+should be written at the end of the sequence
+to end the loop.
+
+Syntax:
+
+loop
+   <sequence of statements>
+end loop;
+
+
+2) While Loop
+
+Syntax:
+
+while <condition>
+loop
+    <action>
+end loop;
+
+3) For Loop
+
+Syntax:
+
+for variable in [reverse] start..end
+loop
+   <action>
+end loop;
+
+4) Sequential control
+
+The GOTO statement:
+
+The GOTO statement changes the flow of control within a PL/SQL block. This statement
+allows execution of a section of code, which is not in the normal flow of control.
+The entry point into such a block of code is marked using the tags <<userdefined name>>.
+The GOTO statement can then make use of this user-defined name to jump into that block
+of code for execution.
+
+Syntax:
+
+GOTO <codeblock name>;

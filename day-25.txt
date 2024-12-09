@@ -1,0 +1,89 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create a pl/sql block to create a record type as it is well-known, of all employees who earns more 
+than 1700 by prompting the user to enter employee no, then a block will test if the employees 
+earns that salary before displaying details. The record must store the employee’s 
+number,job,salary and annual salary 
+
+
+ANSWER...
+
+
+
+SQL> DECLARE
+  2    TYPE emp_record IS RECORD (
+  3      empno      NUMBER,
+  4      job        VARCHAR2(50),
+  5      sal        NUMBER,
+  6      annual_sal NUMBER
+  7    );
+  8    emp_rec emp_record;
+  9    v_empno NUMBER;
+ 10    v_sal NUMBER;
+ 11  BEGIN
+ 12    v_empno := &Enter_Employee_No;
+ 13
+ 14    SELECT SAL INTO v_sal FROM EMP4 WHERE EMPNO = v_empno;
+ 15
+ 16    IF v_sal > 1700 THEN
+ 17      SELECT EMPNO, JOB, SAL, SAL * 12
+ 18      INTO emp_rec
+ 19      FROM EMP4
+ 20      WHERE EMPNO = v_empno;
+ 21
+ 22      DBMS_OUTPUT.PUT_LINE('Employee No: ' || emp_rec.empno);
+ 23      DBMS_OUTPUT.PUT_LINE('Job: ' || emp_rec.job);
+ 24      DBMS_OUTPUT.PUT_LINE('Salary: ' || emp_rec.sal);
+ 25      DBMS_OUTPUT.PUT_LINE('Annual Salary: ' || emp_rec.annual_sal);
+ 26    ELSE
+ 27      DBMS_OUTPUT.PUT_LINE('Employee does not earn more than 1700.');
+ 28    END IF;
+ 29  EXCEPTION
+ 30    WHEN NO_DATA_FOUND THEN
+ 31      DBMS_OUTPUT.PUT_LINE('No employee found with that number.');
+ 32  END;
+ 33  /
+Enter value for enter_employee_no: 7698
+old  12:   v_empno := &Enter_Employee_No;
+new  12:   v_empno := 7698;
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+Desirable List (Practical): 
+1 Write a pl/sql block to add record twice in database using for loop.
+
+
+ANSWER...
+
+
+
+
+SQL> BEGIN
+  2    FOR i IN 1..2 LOOP
+  3      BEGIN
+  4        INSERT INTO EMP4 (EMPNO, JOB, SAL)
+  5        VALUES (&Enter_Emp_No, '&Enter_Job', &Enter_Salary);
+  6      EXCEPTION
+  7        WHEN DUP_VAL_ON_INDEX THEN
+  8          DBMS_OUTPUT.PUT_LINE('Duplicate entry found, skipping insert for EMPNO: ' || &Enter_Emp_No);
+  9      END;
+ 10    END LOOP;
+ 11    COMMIT;
+ 12  END;
+ 13  /
+Enter value for enter_emp_no: 7839
+Enter value for enter_job: president
+Enter value for enter_salary: 5000
+old   5:       VALUES (&Enter_Emp_No, '&Enter_Job', &Enter_Salary);
+new   5:       VALUES (7839, 'president', 5000);
+Enter value for enter_emp_no: 7566
+old   8:         DBMS_OUTPUT.PUT_LINE('Duplicate entry found, skipping insert for EMPNO: ' || &Enter_Emp_No);
+new   8:         DBMS_OUTPUT.PUT_LINE('Duplicate entry found, skipping insert for EMPNO: ' || 7566);
+
+PL/SQL procedure successfully completed.

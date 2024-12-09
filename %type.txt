@@ -1,0 +1,44 @@
+%TYPE Attribute
+
+The %TYPE attribute lets you declare a data item of the same data type as a 
+previously declared variable or column (without knowing what that type is). 
+If the declaration of the referenced item changes, then the declaration of 
+the referencing item changes accordingly.
+
+The syntax of the declaration is:
+
+referencing_item referenced_item%TYPE;
+
+
+The referencing item inherits the following 
+from the referenced item:
+
+Data type and size
+Constraints (unless the referenced item is a column)
+The referencing item does not inherit the initial value 
+of the referenced item. 
+Therefore, if the referencing item specifies or inherits 
+the NOT NULL constraint, 
+you must specify an initial value for it.
+
+The %TYPE attribute is particularly useful when
+ declaring variables to hold database values. 
+The syntax for declaring a variable of the 
+same type as a column is:
+
+variable_name table_name.column_name%TYPE;
+
+Example:
+
+DECLARE
+  name     VARCHAR(25) NOT NULL := 'Smith';
+  surname  name%TYPE := 'Jones';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('name=' || name);
+  DBMS_OUTPUT.PUT_LINE('surname=' || surname);
+END;
+/
+Result:
+
+name=Smith
+surname=Jones

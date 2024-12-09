@@ -1,0 +1,51 @@
+**********************************************************************************************
+Trigger Syntax
+**********************************************************************************************
+CREATE [OR REPLACE] TRIGGER trigger_name		
+	BEFORE | AFTER
+	[INSERT, UPDATE, DELETE [COLUMN NAME..]
+	ON table_name
+
+	Referencing [ OLD AS OLD | NEW AS NEW ]
+	FOR EACH ROW | FOR EACH STATEMENT [ WHEN Condition ]
+DECLARE
+    [declaration_section
+	    variable declarations;
+	    constant declarations;
+    ]
+BEGIN
+    [executable_section
+		PL/SQL execute/subprogram body
+    ]
+EXCEPTION
+    [exception_section
+		PL/SQL Exception block
+    ]
+END;
+**********************************************************************************************
+Syntax Description
+**********************************************************************************************
+1) CREATE [OR REPLACE] TRIGGER trigger_name :
+	Create a trigger with the given name. If already have overwrite the 
+	existing trigger with defined same name.
+2) BEFORE | AFTER : 
+	Indicates when the trigger get fire. BEFORE trigger execute 
+	before when statement execute before. AFTER trigger execute after 
+	the statement execute.
+3) [INSERT, UPDATE, DELETE [COLUMN NAME..] : 
+	Determines the performing trigger event. You can define more 
+	then one triggering event separated by OR keyword.
+4) ON table_name : 
+	Define the table name to performing trigger event.
+5) Referencing [ OLD AS OLD | NEW AS NEW ] : 
+	Give referencing to a old and new values of the data. 
+	:old means use existing row to perform event and 
+	:new means use executing new row to perform event. 
+	You can set referencing names user define name from old (or new).
+	You can't referencing old values when inserting a record, 
+	or new values when deleting a record, because It's does not exist.
+6) FOR EACH ROW | FOR EACH STATEMENT : 
+	Trigger must fire when each row gets Affected (ROW Trigger). 
+	and fire only once when the entire sql statement is execute (STATEMENT Trigger).
+7) WHEN Condition : Optional. 
+	Use only for row level trigger. Trigger fire when specified condition is satisfy.

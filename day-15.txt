@@ -1,0 +1,58 @@
+					QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to print total salary of employees from the employee table.
+
+
+					ANSWER...
+
+
+SQL> DECLARE
+  2      v_total_salary NUMBER;
+  3  BEGIN
+  4      SELECT SUM(sal)
+  5      INTO v_total_salary
+  6      FROM EMP3;
+  7
+  8      DBMS_OUTPUT.PUT_LINE('Total salary of all employees: ' || v_total_salary);
+  9  END;
+ 10  /
+Total salary of all employees: 16025
+
+PL/SQL procedure successfully completed.
+
+
+					QUESTION...
+
+
+Desirable List (Practical): 
+1 Using above table Solve following queries.  
+1. Write a pl/sql block to display all employees who are not in department number (deptno) 20. 
+
+
+					ANSWER...
+
+
+DECLARE
+    CURSOR emp_cursor IS
+        SELECT ename
+        FROM EMP4
+        WHERE deptno != 20;
+    emp_name EMP4.ename%TYPE;  -- Change EMP to EMP4
+BEGIN
+    OPEN emp_cursor;
+    LOOP
+        FETCH emp_cursor INTO emp_name;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Employee Name: ' || emp_name);
+    END LOOP;
+    CLOSE emp_cursor;
+END;
+/
+
+
+
+					QUESTION...
+
+

@@ -1,0 +1,48 @@
+Implement function which takes input cnum and 
+returns cname.
+***********************************************************
+SQL> desc customers;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ C_ID                                               NUMBER(2)
+ CNAME                                              VARCHAR2(20)
+ CITY                                               VARCHAR2(20)
+
+SQL> select *from customers;
+
+      C_ID CNAME                CITY
+---------- -------------------- --------------------
+         1 Ruchita              London
+         2 Komal                London
+         3 Shalin               Berlin
+***********************************************************
+Solution: 
+***********************************************************
+create or replace function func1(cnum1 in number)
+   return varchar2 as
+     cursor cs(cnum1 number)  is select cname from customers1 where c_id = cnum1;
+     cname1 varchar2(30);
+begin
+   open cs(cnum1);
+     fetch cs into cname1;
+     if cs%notfound then
+     	dbms_output.put_line('No Customers found');
+     end if;
+   close cs;
+   return (cname1);
+end;
+***********************************************************
+Pl Sql Block For calling the function..
+***********************************************************
+declare
+    begin
+    dbms_output.put_line(customer(1));
+end;
+***********************************************************  
+Output:
+***********************************************************
+Ruchita
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

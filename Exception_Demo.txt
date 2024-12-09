@@ -1,0 +1,296 @@
+-- Create the emp_mstr table
+CREATE TABLE emp_mstr (
+    e_id NUMBER(2) NOT NULL,
+    first_name VARCHAR2(30),
+    last_name VARCHAR2(30),
+    salary NUMBER(8,2),
+    CONSTRAINT pk_emp_mstr PRIMARY KEY (e_id)
+);
+
+-- Insert 5 records into the emp_mstr table
+INSERT INTO emp_mstr (e_id, first_name, last_name, salary)
+VALUES (1, 'John', 'Doe', 55000.00);
+
+INSERT INTO emp_mstr (e_id, first_name, last_name, salary)
+VALUES (2, 'Jane', 'Smith', 62000.00);
+
+INSERT INTO emp_mstr (e_id, first_name, last_name, salary)
+VALUES (3, 'Michael', 'Brown', 47000.00);
+
+INSERT INTO emp_mstr (e_id, first_name, last_name, salary)
+VALUES (4, 'Emily', 'Davis', 71000.00);
+
+INSERT INTO emp_mstr (e_id, first_name, last_name, salary)
+VALUES (5, 'David', 'Wilson', 53000.00);
+
+-- Commit the changes
+COMMIT;
+
+
+
+
+
+SQL> desc emp_mstr;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ E_ID                                                              NOT NULL NUMBER(2)
+ FIRST_NAME                                                                 VARCHAR2(30)
+ LAST_NAME                                                                  VARCHAR2(30)
+ SALARY                                                                     NUMBER(8,2)
+************************************************************************
+SQL> select *from emp_mstr;
+
+      E_ID FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+         1 Ruchita                        Vyas                                 5000
+         2 Komal                          Trivedi                             15000
+         3 Vikas                          Gokhale                             10000
+         4 Nikunj                         Patel                                2000
+         5 Manish                         Shah                                12000
+************************************************************************
+Demo1-no_data_found
+************************************************************************
+DECLARE
+ temp emp_mstr%rowtype;
+
+BEGIN
+ SELECT * INTO temp FROM emp_mstr WHERE e_id=13;
+EXCEPTION
+ WHEN no_data_found THEN
+  dbms_output.put_line('Table is not having data');
+END;
+/
+************************************************************************
+Output:
+************************************************************************
+SQL> /
+Table is not having data
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+************************************************************************
+Demo2-myexception
+************************************************************************
+DECLARE
+	myex EXCEPTION;
+	i NUMBER;
+BEGIN
+	FOR i IN (SELECT * FROM emp_mstr) LOOP
+		IF i.e_id = 13 THEN
+			RAISE myex;
+		END IF;
+	END LOOP;
+EXCEPTION
+	WHEN myex THEN
+		dbms_output.put_line('Employee number already exist in emp_mstr table.');
+END;
+************************************************************************
+Output:
+************************************************************************
+Employee number already exist in emp_mstr table.
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+************************************************************************
+Demo3-myexception
+(The Oracle error code `-20015` is a user-defined error, not a system-defined one. Oracle reserves error codes ranging from `-20000` to `-20999` for user-defined exceptions. This means that error `-20015` is generated explicitly in your code through a `RAISE_APPLICATION_ERROR` procedure.)
+************************************************************************
+DECLARE
+	myex EXCEPTION;
+	PRAGMA EXCEPTION_INIT(myex,-20015);	
+	n NUMBER := &n;
+BEGIN
+	FOR i IN 1..n LOOP
+		dbms_output.put_line(i);
+		IF i=n THEN
+			RAISE myex;
+		END IF;
+	END LOOP;
+EXCEPTION
+	WHEN myex THEN
+		dbms_output.put_line('loop finish');
+END;
+************************************************************************
+Output:
+************************************************************************
+SQL> /
+Enter value for n: 10
+old   4:  n NUMBER := &n;
+new   4:  n NUMBER := 10;
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+loop finish
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+************************************************************************
+Demo4- RAISE_APPLICATION_ERROR (RAISE_APPLICATION_ERROR is a built-in Oracle procedure that allows you to create and raise user-defined error messages in PL/SQL. It is commonly used to return custom error messages and error codes to the calling environment when a specific business rule or condition is violated.)
+
+Syntex : RAISE_APPLICATION_ERROR(error_number, error_message);
+error_number: A negative integer in the range from -20000 to -20999, which represents the custom error number.
+error_message: A string that represents the custom error message (up to 2048 characters).
+************************************************************************
+1]  DECLARE
+	myex EXCEPTION;
+	n NUMBER := &n;
+BEGIN
+	FOR i IN 1..n LOOP
+		dbms_output.put_line(i);
+		IF i=n THEN
+			RAISE myex;
+		END IF;
+	END LOOP;
+EXCEPTION
+	WHEN myex THEN
+		RAISE_APPLICATION_ERROR(-20015,'loop finish');
+END;
+************************************************************************
+Output:
+************************************************************************
+SQL> /
+Enter value for n: 12
+old   3:  n NUMBER := &n;
+new   3:  n NUMBER := 12;
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+DECLARE
+*
+ERROR at line 1:
+ORA-20015: loop finish
+ORA-06512: at line 13
+
+----------------------------------------------------------------
+CREATE TABLE student (
+    RNO   NUMBER(5)      PRIMARY KEY,
+    M1    NUMBER(3)      NOT NULL,
+    M2    NUMBER(3)      NOT NULL,
+    M3    NUMBER(3)      NOT NULL,
+    TOT   NUMBER(4)       -- Allows NULL initially
+);
+
+-- 2. Insert data into the student table
+INSERT INTO student (RNO, M1, M2, M3) VALUES (1, 85, 90, 78);
+INSERT INTO student (RNO, M1, M2, M3) VALUES (2, 75, 80, 88);
+INSERT INTO student (RNO, M1, M2, M3) VALUES (3, 92, 87, 85);
+INSERT INTO student (RNO, M1, M2, M3) VALUES (4, 65, 70, 72);
+INSERT INTO student (RNO, M1, M2, M3) VALUES (5, 80, 85, 90);
+-------------------------------------------------------------------------------------------------
+2] DECLARE
+    v_marks NUMBER := 105; -- Set to a value greater than 100 to trigger the error
+BEGIN
+    -- Check if the marks exceed the allowed limit
+    IF v_marks > 100 THEN
+        -- Raise a custom application error
+        RAISE_APPLICATION_ERROR(-20001, 'Marks cannot exceed 100.');
+    ELSE
+        -- Otherwise, you can proceed with inserting the student
+        DBMS_OUTPUT.PUT_LINE('Marks are within the allowed range.');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle any exceptions and display the error message
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/
+
+
+************************************************************************
+DEMO-SQLCODE and SQLERRM
+
+n PL/SQL, SQLCODE and SQLERRM are used to capture and handle the error code and error message when an exception occurs. They are particularly useful within the EXCEPTION block to provide detailed information about the error that was raised.
+
+1. SQLCODE
+Definition: Returns the numeric error code associated with the most recent exception.
+Usage: It is often used to capture and log the specific Oracle error code, especially in WHEN OTHERS exception handling.
+Type: Integer.
+2. SQLERRM
+Definition: Returns the error message that corresponds to the most recent exception.
+Usage: It provides a human-readable error message describing the error, which can be logged or displayed.
+Type: String.
+Limitation: The error message returned by SQLERRM is limited to 512 characters..
+************************************************************************
+
+DECLARE
+    v_numerator NUMBER := 10;
+    v_denominator NUMBER := 0;
+    v_result NUMBER;
+BEGIN
+    -- Attempt to divide by zero, which will raise an exception
+    v_result := v_numerator / v_denominator;
+    DBMS_OUTPUT.PUT_LINE('Result: ' || v_result);
+    
+EXCEPTION
+    WHEN ZERO_DIVIDE THEN
+        -- Handle division by zero error
+        DBMS_OUTPUT.PUT_LINE('Error: Division by zero. Code: ' || SQLCODE || ', Message: ' || SQLERRM);
+    WHEN OTHERS THEN
+        -- Handle any other unexpected exceptions
+        DBMS_OUTPUT.PUT_LINE('Unexpected Error - Code: ' || SQLCODE || ', Message: ' || SQLERRM);
+END;
+/
+
+
+
+
+
+************************************************************************
+DEMO-5
+************************************************************************
+declare
+	myex exception;
+	i number;
+	tmp emp_mstr%rowtype;
+begin
+	i:=&i;
+	select * into tmp from emp_mstr where e_id=i;
+	
+	if tmp.e_id=i then
+		raise myex;
+	end if;
+exception
+	when myex then
+	dbms_output.put_line('Employee Number already exist in emp_mstr table');
+	WHEN no_data_found THEN
+	dbms_output.put_line('Table is not having data');
+end;
+************************************************************************
+OUTPUT:
+************************************************************************
+Enter value for i: 1
+old   6:  i:=&i;
+new   6:  i:=1;
+Employee Number already exist in emp_mstr table
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+SQL> /
+Enter value for i: 10
+old   6:  i:=&i;
+new   6:  i:=10;
+Table is not having data
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

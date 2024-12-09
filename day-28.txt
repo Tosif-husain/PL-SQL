@@ -1,0 +1,98 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write a PL/SQL block, which takes as input the department name and displays all these 
+employees of this department who have been working since 2010. (Use Cursor) 
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2    CURSOR emp_cursor IS
+  3      SELECT EMPNO, ENAME, HIREDATE FROM EMP4
+  4      WHERE DEPTNO = &Enter_Dept_No AND EXTRACT(YEAR FROM HIREDATE) >= 2010;
+  5    v_empno EMP4.EMPNO%TYPE;
+  6    v_ename EMP4.ENAME%TYPE;
+  7    v_hiredate EMP4.HIREDATE%TYPE;
+  8  BEGIN
+  9    OPEN emp_cursor;
+ 10    LOOP
+ 11      FETCH emp_cursor INTO v_empno, v_ename, v_hiredate;
+ 12      EXIT WHEN emp_cursor%NOTFOUND;
+ 13
+ 14      DBMS_OUTPUT.PUT_LINE('Employee No: ' || v_empno || ', Name: ' || v_ename || ', Hire Date: ' || v_hiredate);
+ 15    END LOOP;
+ 16    CLOSE emp_cursor;
+ 17  END;
+ 18  /
+Enter value for enter_dept_no: 30
+old   4:     WHERE DEPTNO = &Enter_Dept_No AND EXTRACT(YEAR FROM HIREDATE) >= 2010;
+new   4:     WHERE DEPTNO = 30 AND EXTRACT(YEAR FROM HIREDATE) >= 2010;
+Employee No: 7698, Name: BLAKE, Hire Date: 01-MAY-81
+Employee No: 7900, Name: JACKSON, Hire Date: 03-DEC-81
+Employee No: 7654, Name: JAMES, Hire Date: 03-DEC-81
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+Desirable List (Practical (Practical) 
+1 Write a PL/SQL Cursor to take a employee’s name as an input from the user and prepare a report 
+in the following format: and Give appropriate message if employee Not found.  
+***********************************************************  
+EMPNO EMP_NAME JOB SALARY ************************************************************ 
+ Grand Total:
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2    CURSOR emp_cursor IS
+  3      SELECT EMPNO, ENAME, JOB, SAL FROM EMP4
+  4      WHERE ENAME = '&Enter_Emp_Name';
+  5
+  6    v_empno EMP4.EMPNO%TYPE;
+  7    v_ename EMP4.ENAME%TYPE;
+  8    v_job EMP4.JOB%TYPE;
+  9    v_sal EMP4.SAL%TYPE;
+ 10    v_total NUMBER := 0;
+ 11    v_found BOOLEAN := FALSE;
+ 12  BEGIN
+ 13    DBMS_OUTPUT.PUT_LINE('***********************************************************');
+ 14    DBMS_OUTPUT.PUT_LINE('EMPNO  EMP_NAME  JOB          SALARY');
+ 15    DBMS_OUTPUT.PUT_LINE('***********************************************************');
+ 16
+ 17    OPEN emp_cursor;
+ 18    LOOP
+ 19      FETCH emp_cursor INTO v_empno, v_ename, v_job, v_sal;
+ 20      EXIT WHEN emp_cursor%NOTFOUND;
+ 21
+ 22      v_found := TRUE;
+ 23      v_total := v_total + v_sal;
+ 24
+ 25      DBMS_OUTPUT.PUT_LINE(v_empno || '    ' || v_ename || '    ' || v_job || '    ' || v_sal);
+ 26    END LOOP;
+ 27    CLOSE emp_cursor;
+ 28
+ 29    IF NOT v_found THEN
+ 30      DBMS_OUTPUT.PUT_LINE('Employee not found.');
+ 31    ELSE
+ 32      DBMS_OUTPUT.PUT_LINE('***********************************************************');
+ 33      DBMS_OUTPUT.PUT_LINE('Grand Total: ' || v_total);
+ 34    END IF;
+ 35  END;
+ 36  /
+Enter value for enter_emp_name: clark
+old   4:     WHERE ENAME = '&Enter_Emp_Name';
+new   4:     WHERE ENAME = 'clark';
+***********************************************************
+EMPNO  EMP_NAME  JOB          SALARY
+***********************************************************
+Employee not found.
+
+PL/SQL procedure successfully completed.

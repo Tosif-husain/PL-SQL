@@ -1,0 +1,42 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to update the salary of the employees with 1000 when total number of 
+employees in a particular department is greater than 3
+
+
+ANSWER...
+
+
+
+SQL> DECLARE
+  2      v_deptno NUMBER;
+  3      v_emp_count NUMBER;
+  4  BEGIN
+  5      FOR rec IN (SELECT deptno FROM EMP4 GROUP BY deptno) LOOP
+  6          v_deptno := rec.deptno;
+  7
+  8          SELECT COUNT(*) INTO v_emp_count
+  9          FROM EMP4
+ 10          WHERE deptno = v_deptno;
+ 11
+ 12          IF v_emp_count > 3 THEN
+ 13              UPDATE EMP4
+ 14              SET sal = sal + 1000
+ 15              WHERE deptno = v_deptno;
+ 16          END IF;
+ 17      END LOOP;
+ 18
+ 19      COMMIT;
+ 20
+ 21      DBMS_OUTPUT.PUT_LINE('Salaries updated for departments with more than 3 employees.');
+ 22
+ 23  EXCEPTION
+ 24      WHEN OTHERS THEN
+ 25          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 26  END;
+ 27  /
+Salaries updated for departments with more than 3 employees.
+
+PL/SQL procedure successfully completed.

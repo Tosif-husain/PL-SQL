@@ -1,0 +1,14 @@
+Write a pl/sql block to input an employee number and increase his salary by 10%.Give appropriate message after updation.
+  
+  Declare
+       veno employee.eno%type;
+       nodata EXCEPTION;
+       PRAGMA exception_init(nodata,-0044)
+  begin
+         veno:=&veno;
+         update employee set salary=salary+salary *0.10
+         where eno=veno;
+    EXCEPTION
+          when nodata then
+             dbms_output.put_line(‘Record not found’);
+    end; 

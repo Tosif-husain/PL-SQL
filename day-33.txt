@@ -1,0 +1,36 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write PL/SQL block to increase the salary by 15 %( Rs. 1000) for all Employees in emp table. 
+Raise a user defined exception if an employee is not found.
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2      no_employees_found EXCEPTION;
+  3      v_row_count NUMBER;
+  4
+  5  BEGIN
+  6      UPDATE emp4
+  7      SET SAL = SAL +
+  8          GREATEST(0.15 * SAL, 1000);
+  9
+ 10      v_row_count := SQL%ROWCOUNT;
+ 11
+ 12      IF v_row_count = 0 THEN
+ 13          RAISE no_employees_found;
+ 14      END IF;
+ 15
+ 16      DBMS_OUTPUT.PUT_LINE(v_row_count || ' employee(s) salary updated.');
+ 17
+ 18  EXCEPTION
+ 19      WHEN no_employees_found THEN
+ 20          DBMS_OUTPUT.PUT_LINE('No employees found in the emp4 table.');
+ 21  END;
+ 22  /
+7 employee(s) salary updated.
+
+PL/SQL procedure successfully completed.

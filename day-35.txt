@@ -1,0 +1,26 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create a procedure to display the employee name whose employeeno is accepted by the user.
+
+
+ANSWER...
+
+PL/SQL procedure successfully completed.
+
+SQL> CREATE OR REPLACE PROCEDURE DisplayEmployeeName(p_empno IN NUMBER) IS
+  2      v_emp_name VARCHAR2(50);
+  3  BEGIN
+  4      SELECT ENAME INTO v_emp_name
+  5      FROM emp4
+  6      WHERE EMPNO = p_empno;
+  7
+  8      DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_emp_name);
+  9  EXCEPTION
+ 10      WHEN NO_DATA_FOUND THEN
+ 11          DBMS_OUTPUT.PUT_LINE('No employee found with Employee Number: ' || p_empno);
+ 12  END DisplayEmployeeName;
+ 13  /
+
+Procedure created.

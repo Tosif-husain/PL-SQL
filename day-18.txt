@@ -1,0 +1,59 @@
+QUESTION...					
+
+
+
+Essential List (Practical) 
+ 
+ 
+1 Write a pl/sql block to retrieves the salary using the value the user is prompted to enter. The user 
+is prompted to enter job_title. Then block test as to whether the job retrieved is an Analyst or 
+Manager or Clerk. For an Analyst, the salary has been increased by 5.5%, a Manager will have a 
+salary increased by 5%, whereas the salary of the Clerk will increase by 7.5% and the rest of the 
+employees will have salary increase of 8% 
+
+
+ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_job_title VARCHAR2(50);
+  3      v_salary EMP4.sal%TYPE;
+  4      v_new_salary EMP4.sal%TYPE;
+  5
+  6  BEGIN
+  7      v_job_title := '&job_title';
+  8
+  9      SELECT sal
+ 10      INTO v_salary
+ 11      FROM EMP4
+ 12      WHERE job = v_job_title;
+ 13
+ 14      CASE v_job_title
+ 15          WHEN 'ANALYST' THEN
+ 16              v_new_salary := v_salary * 1.055; -- Increase by 5.5%
+ 17          WHEN 'MANAGER' THEN
+ 18              v_new_salary := v_salary * 1.05;  -- Increase by 5%
+ 19          WHEN 'CLERK' THEN
+ 20              v_new_salary := v_salary * 1.075; -- Increase by 7.5%
+ 21          ELSE
+ 22              v_new_salary := v_salary * 1.08;  -- Increase by 8% for others
+ 23      END CASE;
+ 24
+ 25      DBMS_OUTPUT.PUT_LINE('Original Salary: ' || v_salary);
+ 26      DBMS_OUTPUT.PUT_LINE('New Salary: ' || v_new_salary);
+ 27
+ 28  EXCEPTION
+ 29      WHEN NO_DATA_FOUND THEN
+ 30          DBMS_OUTPUT.PUT_LINE('No employee found with the job title: ' || v_job_title);
+ 31      WHEN OTHERS THEN
+ 32          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 33  END;
+ 34  /
+Enter value for job_title: assistent_manager
+old   7:     v_job_title := '&job_title';
+new   7:     v_job_title := 'assistent_manager';
+No employee found with the job title: assistent_manager
+
+PL/SQL procedure successfully completed.

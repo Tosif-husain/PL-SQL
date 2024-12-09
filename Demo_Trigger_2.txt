@@ -1,0 +1,36 @@
+Create a trigger on delete from emp_mstr
+
+SQL> desc emp_mstr;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ E_ID                                                              NOT NULL NUMBER(2)
+ FIRST_NAME                                                                 VARCHAR2(30)
+ LAST_NAME                                                                  VARCHAR2(30)
+ SALARY                                                                     NUMBER(8,2)
+
+***************************************************************************************
+Solution:
+***************************************************************************************
+create or replace trigger trg2
+after
+	delete on emp_mstr
+	for each row
+begin
+	if :old.e_id=1 then
+		raise_application_error(-20015,'You cannot delete this row');
+	end if;
+end;
+
+   /
+
+Trigger created.
+***************************************************************************************
+Output:
+***************************************************************************************
+SQL> delete from emp_mstr where e_id=1;
+delete from emp_mstr where e_id=1
+            *
+ERROR at line 1:
+ORA-20015: You cannot delete this row
+ORA-06512: at "RUCHITA.TRG2", line 3
+ORA-04088: error during execution of trigger 'RUCHITA.TRG2'

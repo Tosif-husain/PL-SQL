@@ -1,0 +1,52 @@
+					QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to retrieves the details of an employee when the user is prompted to enter 
+the job_title 
+
+
+					ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_job_title VARCHAR2(50);
+  3      v_ename EMP4.ename%TYPE;
+  4      v_empno EMP4.empno%TYPE;
+  5      v_mgr EMP4.mgr%TYPE;
+  6      v_hiredate EMP4.hiredate%TYPE;
+  7      v_sal EMP4.sal%TYPE;
+  8      v_comm EMP4.comm%TYPE;
+  9      v_deptno EMP4.deptno%TYPE;
+ 10
+ 11  BEGIN
+ 12      v_job_title := '&job_title';
+ 13
+ 14      SELECT empno, ename, mgr, hiredate, sal, comm, deptno
+ 15      INTO v_empno, v_ename, v_mgr, v_hiredate, v_sal, v_comm, v_deptno
+ 16      FROM EMP4
+ 17      WHERE job = v_job_title;
+ 18
+ 19      DBMS_OUTPUT.PUT_LINE('Employee Number: ' || v_empno);
+ 20      DBMS_OUTPUT.PUT_LINE('Name: ' || v_ename);
+ 21      DBMS_OUTPUT.PUT_LINE('Manager: ' || v_mgr);
+ 22      DBMS_OUTPUT.PUT_LINE('Hire Date: ' || v_hiredate);
+ 23      DBMS_OUTPUT.PUT_LINE('Salary: ' || v_sal);
+ 24      DBMS_OUTPUT.PUT_LINE('Commission: ' || v_comm);
+ 25      DBMS_OUTPUT.PUT_LINE('Department Number: ' || v_deptno);
+ 26
+ 27  EXCEPTION
+ 28      WHEN NO_DATA_FOUND THEN
+ 29          DBMS_OUTPUT.PUT_LINE('No employee found with the job title: ' || v_job_title);
+ 30      WHEN OTHERS THEN
+ 31          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 32  END;
+ 33  /
+Enter value for job_title: manager
+old  12:     v_job_title := '&job_title';
+new  12:     v_job_title := 'manager';
+No employee found with the job title: manager
+
+PL/SQL procedure successfully completed.

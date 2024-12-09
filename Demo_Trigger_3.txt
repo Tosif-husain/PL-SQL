@@ -1,0 +1,60 @@
+Create a trigger to generate primary key like E1, E2 and so on.
+*********************************************************************************************
+SQL> create table emp_mstr1(e_id varchar2(10) primary key,first_name varchar2(30),
+last_name varchar2(30),salary number(8,2));
+
+Table created.
+*********************************************************************************************
+SQL> desc emp_mstr1;
+ Name                                                                          Null?    Type
+ ----------------------------------------------------------------------------- -------- ---------------
+ E_ID                                                                          NOT NULL VARCHAR2(10)
+ FIRST_NAME                                                                             VARCHAR2(30)
+ LAST_NAME                                                                              VARCHAR2(30)
+ SALARY                                                                                 NUMBER(8,2)
+                                                                          
+*********************************************************************************************
+SQL> create sequence emp_seq increment by 1 start with 1;
+
+Sequence created.
+*********************************************************************************************
+create or replace trigger trg3
+before
+	insert on emp_mstr1	
+	for each row
+declare
+	primary_key_value varchar2(10);
+begin
+	select 'E'||to_char(emp_seq.nextval)
+	into primary_key_value from dual;
+	:new.e_id:=primary_key_value;
+end;
+   /
+
+Trigger created.
+*********************************************************************************************
+Output:
+*********************************************************************************************
+  1* insert into emp_mstr1 values('1','Ruchita','Vyas',12000)
+SQL> /
+
+1 row created.
+SQL> select *from emp_mstr1;
+
+E_ID       FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+E1         Ruchita                        Vyas                                12000
+
+*********************************************************************************************
+  1* insert into emp_mstr1 values('12','Komal','Shastri',20000)
+SQL> /
+1 row created.
+
+Commit complete.
+
+SQL> select *from emp_mstr1;
+
+E_ID       FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+E1         Ruchita                        Vyas                                12000
+E2         Komal                          Shastri                             20000

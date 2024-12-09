@@ -1,0 +1,37 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create table: 
+EmployeeInformation: (Emp_No. , Emp_Name , Emp_Dept. , Emp_Salary) 
+Display employee number wise first two employee details using for loop cursor. 
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT Emp_No, Emp_Name, Emp_Dept, Emp_Salary
+  4          FROM EmployeeInformation1
+  5          ORDER BY Emp_No;
+  6
+  7      emp_count NUMBER := 0;
+  8  BEGIN
+  9      FOR emp_record IN emp_cursor LOOP
+ 10          emp_count := emp_count + 1;
+ 11          DBMS_OUTPUT.PUT_LINE('Emp_No: ' || emp_record.Emp_No ||
+ 12                               ', Emp_Name: ' || emp_record.Emp_Name ||
+ 13                               ', Emp_Dept: ' || emp_record.Emp_Dept ||
+ 14                               ', Emp_Salary: ' || emp_record.Emp_Salary);
+ 15
+ 16          IF emp_count = 2 THEN
+ 17              EXIT;
+ 18          END IF;
+ 19      END LOOP;
+ 20  END;
+ 21  /
+Emp_No: 101, Emp_Name: John Doe, Emp_Dept: HR, Emp_Salary: 25000
+Emp_No: 102, Emp_Name: Jane Smith, Emp_Dept: Finance, Emp_Salary: 18000
+
+PL/SQL procedure successfully completed.

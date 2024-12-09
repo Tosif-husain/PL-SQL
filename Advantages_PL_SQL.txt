@@ -1,0 +1,22 @@
+Advantages of PL/SQL
+
+1) PL/SQLis development tool that not only supports SQL data manipulation but also provides 
+   facilities of conditional checking, branching and looping.
+2) PL/SQL sends an entire block of SQL statements to the oracle engine all in one go.
+   Communication between the program block and the oracle engine reduces considerably,
+   reducing network traffic.
+   Since the Oracle engine got the SQL statements as a single block, it processes this code
+   much faster than if it got the code one sentence at a time. There is a deinite improvement 
+   in the performance time of the oracle engine. As an entire block of SQL code is passed to
+   the Oracle engine at one time for execution, all changes made to the data in the table 
+   are done or undone in one go.
+3) PL/SQL also permits dealing with errors as required, and facilities displaying user-friendly
+   messages when errors are encountered.
+4) PL/SQL allows declaration and use of variables in blocks of code. These variables can be
+   used to store intermediate results of a query for later processing, or calculate values
+   and insert them into an Oracle table later. PL/SQL variables can be used anywhere, either in
+   SQL statements or in PL/SQL blocks.
+5) via PL/SQL, all sorts of calculations can be done quickly and efficiently without the use of
+   the oracle engine. This considerably improves transaction performance.
+6) Applications written in PL/SQL are portable to any computer hardware and operating system,
+   where oracle is operational.

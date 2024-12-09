@@ -1,0 +1,89 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create table: 
+EmployeeInformation: (Emp_No. , Emp_Name , Emp_Dept. , Emp_Salary) 
+Display employee information from emp_information table whose emp_no four (4) using 
+parameterized cursor. 
+
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2      CURSOR emp_cursor(p_Emp_No EmployeeInformation1.Emp_No%TYPE) IS
+  3          SELECT Emp_No, Emp_Name, Emp_Dept, Emp_Salary
+  4          FROM EmployeeInformation1
+  5          WHERE Emp_No = p_Emp_No;
+  6
+  7      v_Emp_No EmployeeInformation1.Emp_No%TYPE;
+  8      v_Emp_Name EmployeeInformation1.Emp_Name%TYPE;
+  9      v_Emp_Dept EmployeeInformation1.Emp_Dept%TYPE;
+ 10      v_Emp_Salary EmployeeInformation1.Emp_Salary%TYPE;
+ 11  BEGIN
+ 12      OPEN emp_cursor(4);
+ 13      FETCH emp_cursor INTO v_Emp_No, v_Emp_Name, v_Emp_Dept, v_Emp_Salary;
+ 14      IF emp_cursor%FOUND THEN
+ 15          DBMS_OUTPUT.PUT_LINE('Emp_No: ' || v_Emp_No ||
+ 16                               ', Emp_Name: ' || v_Emp_Name ||
+ 17                               ', Emp_Dept: ' || v_Emp_Dept ||
+ 18                               ', Emp_Salary: ' || v_Emp_Salary);
+ 19      ELSE
+ 20          DBMS_OUTPUT.PUT_LINE('No employee found with Emp_No 4.');
+ 21      END IF;
+ 22      CLOSE emp_cursor;
+ 23  END;
+ 24  /
+No employee found with Emp_No 4.
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+Desirable List (Practical) 
+1 Using Explicit Cursor to display the top five highest paid workers who are specialized in 
+‘POLISHING’.  
+Wroker(WrokerId,Name,Wage_Per_Hour,Specialized_In,)
+
+
+ANSWER...
+
+
+SQL> DECLARE
+  2      CURSOR worker_cursor IS
+  3          SELECT WorkerId, Name, Wage_Per_Hour, Specialized_In
+  4          FROM Worker
+  5          WHERE Specialized_In = 'POLISHING'
+  6          ORDER BY Wage_Per_Hour DESC
+  7          FETCH FIRST 5 ROWS ONLY;
+  8
+  9      v_WorkerId Worker.WorkerId%TYPE;
+ 10      v_Name Worker.Name%TYPE;
+ 11      v_Wage_Per_Hour Worker.Wage_Per_Hour%TYPE;
+ 12      v_Specialized_In Worker.Specialized_In%TYPE;
+ 13  BEGIN
+ 14      OPEN worker_cursor;
+ 15      LOOP
+ 16          FETCH worker_cursor INTO v_WorkerId, v_Name, v_Wage_Per_Hour, v_Specialized_In;
+ 17          EXIT WHEN worker_cursor%NOTFOUND;
+ 18          DBMS_OUTPUT.PUT_LINE('WorkerId: ' || v_WorkerId ||
+ 19                               ', Name: ' || v_Name ||
+ 20                               ', Wage_Per_Hour: ' || v_Wage_Per_Hour ||
+
+ 21                               ', Specialized_In: ' || v_Specialized_In);
+
+ 22      END LOOP;
+ 23      CLOSE worker_cursor;
+ 24  END;
+ 25  /
+WorkerId: 4, Name: Charlie Davis, Wage_Per_Hour: 35, Specialized_In: POLISHING
+WorkerId: 2, Name: Alice Johnson, Wage_Per_Hour: 30, Specialized_In: POLISHING
+WorkerId: 5, Name: Emily Wilson, Wage_Per_Hour: 28, Specialized_In: POLISHING
+WorkerId: 7, Name: Sarah White, Wage_Per_Hour: 27, Specialized_In: POLISHING
+WorkerId: 1, Name: John Smith, Wage_Per_Hour: 25, Specialized_In: POLISHING
+
+PL/SQL procedure successfully completed.

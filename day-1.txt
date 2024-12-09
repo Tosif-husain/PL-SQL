@@ -1,0 +1,110 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Creating Table with Data Constraints:  
+Viewing data in the tables: (Select Statement and where condition) 
+Filtering Data from the table  
+Sorting Data in the Table: (Order By, Desc clause) 
+ Creating a Table from a Table  
+Inserting Data into a Table from Another Table  
+Deleting records from the table:  
+Using Delete and Truncate operations Destroying Table 
+2 CUST (custno, custname, addln1, addln2, city, state, phone)  
+ITEM (itemno, itemname, itemprice, qty_on_hand)  
+INVOICE (invno, invDate, custno)  
+INV_ITEM (invno, itemno, qty_used) 
+
+
+ANSWER...
+
+
+SQL> SELECT * FROM CUST;
+
+    CUSTNO CUSTNAME                                           ADDLN1          ADDLN2
+---------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------------------------------------------------------------------------------------------------
+CITY                                               STATE
+     PHONE
+-------------------------------------------------- -------------------------------------------------- ---------------
+         1 John Doe                                           123 Main St     Apt 1
+New York                                           NY
+     1234567890
+
+         2 Jane Smith                                         456 Elm St      Suite 5
+Los Angeles                                        CA
+     0987654321
+
+
+SQL> SELECT * FROM ITEM;
+
+    ITEMNO ITEMNAME                                            ITEMPRICE QTY_ON_HAND
+---------- -------------------------------------------------- ---------- -----------
+         1 Laptop                                                   1000     10
+         2 Mouse                                                      20    100
+         3 Keyboard                                                   50     50
+
+SQL> SELECT * FROM INVOICE;
+
+     INVNO INVDATE       CUSTNO
+---------- --------- ----------
+         1 16-OCT-24          1
+         2 17-OCT-24          2
+
+SQL> SELECT * FROM INV_ITEM;
+
+     INVNO     ITEMNO   QTY_USED
+---------- ---------- ----------
+         1          1          1
+         1          2          2
+         2          3          1  
+
+SQL>
+
+
+     SELECT * FROM CUST WHERE city = 'New York';
+
+    CUSTNO CUSTNAME                                           ADDLN1          ADDLN2
+---------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------- ----------------------------------------------------------------------------------------------------
+CITY                                               STATE
+     PHONE
+-------------------------------------------------- -------------------------------------------------- ---------------
+         1 John Doe                                           123 Main St     Apt 1
+New York                                           NY
+     1234567890
+
+
+
+SQL> SELECT * FROM ITEM ORDER BY itemprice DESC;
+
+    ITEMNO ITEMNAME                                            ITEMPRICE QTY_ON_HAND
+---------- -------------------------------------------------- ---------- -----------
+         1 Laptop                                                   1000          10
+         3 Keyboard                                                   50          50
+         2 Mouse                                                      20         100
+
+
+SQL> CREATE TABLE CUST_BACKUP AS SELECT * FROM CUST;
+
+Table created.
+
+
+SQL> INSERT INTO CUST_BACKUP SELECT * FROM CUST WHERE state = 'NY';
+
+1 row created.
+
+
+
+SQL> DELETE FROM CUST WHERE custno = 2;
+DELETE FROM CUST WHERE custno = 2
+
+
+SQL> TRUNCATE TABLE CUST_BACKUP;
+
+Table truncated.
+
+
+SQL> DROP TABLE CUST_BACKUP;
+
+Table dropped.
+
+

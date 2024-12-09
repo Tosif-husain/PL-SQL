@@ -1,0 +1,54 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to accept job from Employee table. Give the following raise in the salary.  
+By 9% ,if job is clerk  
+By 8% ,if job is manager 
+ By 7%, if job is Salesman.  
+Update the salary of the Employee table 
+
+
+ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_job EMP4.job%TYPE;
+  3  BEGIN
+  4      v_job := '&job';  -- Prompt user for job title
+  5
+  6      IF v_job = 'CLERK' THEN
+  7          UPDATE EMP4
+  8          SET sal = sal * 1.09
+  9          WHERE job = v_job;
+ 10      ELSIF v_job = 'MANAGER' THEN
+ 11          UPDATE EMP4
+ 12          SET sal = sal * 1.08
+ 13          WHERE job = v_job;
+ 14      ELSIF v_job = 'SALESMAN' THEN
+ 15          UPDATE EMP4
+ 16          SET sal = sal * 1.07
+ 17          WHERE job = v_job;
+ 18      ELSE
+ 19          DBMS_OUTPUT.PUT_LINE('No salary update for the job: ' || v_job);
+ 20          RETURN;
+ 21      END IF;
+ 22
+ 23      COMMIT;
+ 24      DBMS_OUTPUT.PUT_LINE('Salaries updated for job: ' || v_job);
+ 25
+ 26  EXCEPTION
+ 27      WHEN OTHERS THEN
+ 28          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 29  END;
+ 30  /
+Enter value for job: 20000
+old   4:     v_job := '&job';  -- Prompt user for job title
+new   4:     v_job := '20000';  -- Prompt user for job title
+No salary update for the job: 20000
+
+PL/SQL procedure successfully completed.
+
+

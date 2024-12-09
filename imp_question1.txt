@@ -1,0 +1,136 @@
+CREATE TABLE Course (
+    CourseId NUMBER PRIMARY KEY,
+    CourseName VARCHAR2(100),
+    Duration NUMBER,
+    Credits NUMBER,
+    Fee NUMBER
+);
+
+CREATE TABLE Instructor (
+    InstructorId NUMBER PRIMARY KEY,
+    InstructorName VARCHAR2(100),
+    Expertise VARCHAR2(100),
+    Experience NUMBER,
+    Contact VARCHAR2(15)
+);
+
+CREATE TABLE Course_Instructor (
+    CourseId NUMBER REFERENCES Course(CourseId),
+    InstructorId NUMBER REFERENCES Instructor(InstructorId),
+    AssignmentDate DATE,
+    PRIMARY KEY (CourseId, InstructorId)
+);
+
+
+INSERT INTO Course VALUES (1, 'Mathematics', 6, 4, 1500);
+INSERT INTO Course VALUES (2, 'Physics', 8, 5, 2000);
+INSERT INTO Course VALUES (3, 'Chemistry', 5, 3, 1200);
+
+INSERT INTO Instructor VALUES (101, 'John Doe', 'Mathematics', 10, '1234567890');
+INSERT INTO Instructor VALUES (102, 'Jane Smith', 'Physics', 8, '0987654321');
+INSERT INTO Instructor VALUES (103, 'Alice Brown', 'Chemistry', 7, '1122334455');
+
+INSERT INTO Course_Instructor VALUES (1, 101, TO_DATE('2024-11-20', 'YYYY-MM-DD'));
+INSERT INTO Course_Instructor VALUES (2, 102, TO_DATE('2024-11-20', 'YYYY-MM-DD'));
+INSERT INTO Course_Instructor VALUES (3, 103, TO_DATE('2024-11-21', 'YYYY-MM-DD'));
+
+
+....PL/SQL Function...
+
+
+
+
+CREATE OR REPLACE FUNCTION GetCourseCountByDate(p_AssignmentDate DATE)
+RETURN NUMBER
+IS
+    v_CourseCount NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_CourseCount
+    FROM Course_Instructor
+    WHERE AssignmentDate = p_AssignmentDate;
+
+    RETURN v_CourseCount;
+END;
+/
+
+
+...Trigger...
+
+
+
+
+CREATE OR REPLACE TRIGGER AssignmentDateUpdateTrigger
+AFTER UPDATE OF AssignmentDate ON Course_Instructor
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Assignment date updated for CourseId: ' || :OLD.CourseId || 
+                         ', InstructorId: ' || :OLD.InstructorId || 
+                         ' from ' || :OLD.AssignmentDate || ' to ' || :NEW.AssignmentDate);
+END;
+/
+
+
+
+
+...Parameterized Cursor...
+
+
+
+
+DECLARE
+    CURSOR CourseCursor(p_InstructorName VARCHAR2) IS
+        SELECT C.CourseId, C.CourseName
+        FROM Course C
+        JOIN Course_Instructor CI ON C.CourseId = CI.CourseId
+        JOIN Instructor I ON CI.InstructorId = I.InstructorId
+        WHERE I.InstructorName = p_InstructorName;
+
+    v_CourseId Course.CourseId%TYPE;
+    v_CourseName Course.CourseName%TYPE;
+
+    e_NoInstructorFound EXCEPTION;
+    v_RowCount NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_RowCount
+    FROM Instructor
+    WHERE InstructorName = 'John Doe';
+
+    IF v_RowCount = 0 THEN
+        RAISE e_NoInstructorFound;
+    END IF;
+
+    OPEN CourseCursor('John Doe');
+    LOOP
+        FETCH CourseCursor INTO v_CourseId, v_CourseName;
+        EXIT WHEN CourseCursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('CourseId: ' || v_CourseId || ', CourseName: ' || v_CourseName);
+    END LOOP;
+    CLOSE CourseCursor;
+
+EXCEPTION
+    WHEN e_NoInstructorFound THEN
+        DBMS_OUTPUT.PUT_LINE('No instructor found with the given name.');
+END;
+/
+
+.....Testing Function and Cursor....
+
+
+
+SET SERVEROUTPUT ON;
+
+-- Test the function
+DECLARE
+    v_TotalCourses NUMBER;
+BEGIN
+    v_TotalCourses := GetCourseCountByDate(TO_DATE('2024-11-20', 'YYYY-MM-DD'));
+    DBMS_OUTPUT.PUT_LINE('Total courses assigned on 2024-11-20: ' || v_TotalCourses);
+END;
+/
+
+-- Test the parameterized cursor
+BEGIN
+    -- Replace 'John Doe' with the desired instructor's name
+    NULL;
+END;
+

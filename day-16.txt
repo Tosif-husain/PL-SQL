@@ -1,0 +1,97 @@
+					QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to retrieves the details of an employees when the user is prompted to enter 
+employee number
+
+
+					ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_empno NUMBER;
+  3      v_ename EMP4.ename%TYPE;
+  4      v_job EMP4.job%TYPE;
+  5      v_mgr EMP4.mgr%TYPE;
+  6      v_hiredate EMP4.hiredate%TYPE;
+  7      v_sal EMP4.sal%TYPE;
+  8      v_comm EMP4.comm%TYPE;
+  9      v_deptno EMP4.deptno%TYPE;
+ 10
+ 11  BEGIN
+ 12      v_empno := &employee_number;
+ 13
+ 14      SELECT ename, job, mgr, hiredate, sal, comm, deptno
+ 15      INTO v_ename, v_job, v_mgr, v_hiredate, v_sal, v_comm, v_deptno
+ 16      FROM EMP4
+ 17      WHERE empno = v_empno;
+ 18
+ 19      DBMS_OUTPUT.PUT_LINE('Employee Number: ' || v_empno);
+ 20      DBMS_OUTPUT.PUT_LINE('Name: ' || v_ename);
+ 21      DBMS_OUTPUT.PUT_LINE('Job: ' || v_job);
+ 22      DBMS_OUTPUT.PUT_LINE('Manager: ' || v_mgr);
+ 23      DBMS_OUTPUT.PUT_LINE('Hire Date: ' || v_hiredate);
+ 24      DBMS_OUTPUT.PUT_LINE('Salary: ' || v_sal);
+ 25      DBMS_OUTPUT.PUT_LINE('Commission: ' || v_comm);
+ 26      DBMS_OUTPUT.PUT_LINE('Department Number: ' || v_deptno);
+ 27
+ 28  EXCEPTION
+ 29      WHEN NO_DATA_FOUND THEN
+ 30          DBMS_OUTPUT.PUT_LINE('No employee found with the number: ' || v_empno);
+ 31      WHEN OTHERS THEN
+ 32          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 33  END;
+ 34  /
+Enter value for employee_number: 1
+old  12:     v_empno := &employee_number;
+new  12:     v_empno := 1;
+No employee found with the number: 1
+
+PL/SQL procedure successfully completed.
+
+
+
+					QUESTION...
+
+
+Desirable List (Practical): 
+1 Write a PL/SQL block using CASE statement to accept the owner name from the user. The user 
+name can be SYS, SYSTEM, HR or SCOTT. If the owner name is SYS then print the result is ‘The 
+Owner is SYS’. If the owner name is SYSTEM then print the result is ‘The Owner is SYSTEM’. If the 
+owner name is HR then print the result is ‘The Owner is HR’. If the owner name is SCOTT then 
+print the result is ‘The Owners SCOTT’. Otherwise print ‘Invalid Choice
+
+
+					ANSWER....
+
+
+PL/SQL procedure successfully completed.
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_owner_name VARCHAR2(20);
+  3      v_result VARCHAR2(50);
+  4  BEGIN
+  5      v_owner_name := UPPER('&owner_name');
+  6
+  7      v_result := CASE v_owner_name
+  8          WHEN 'SYS' THEN 'The Owner is SYS'
+  9          WHEN 'SYSTEM' THEN 'The Owner is SYSTEM'
+ 10          WHEN 'HR' THEN 'The Owner is HR'
+ 11          WHEN 'SCOTT' THEN 'The Owner is SCOTT'
+ 12          ELSE 'Invalid Choice'
+ 13      END;
+ 14
+ 15      DBMS_OUTPUT.PUT_LINE(v_result);
+ 16  END;
+ 17  /
+Enter value for owner_name: KING
+old   5:     v_owner_name := UPPER('&owner_name');
+new   5:     v_owner_name := UPPER('KING');
+Invalid Choice
+
+PL/SQL procedure successfully completed.

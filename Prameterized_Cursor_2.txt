@@ -1,0 +1,169 @@
+Excecise:
+
+Create the following Tables and insert proper data in it.
+
+Supplier (sid, sname, contactnum)
+Parts (pid, pname, color, unit rate)
+Catalog (sid, pid, qty)
+
+Create a PL/ SQL block to prepare invoice in following format.
+Display the invoice in the following format. Use parameterized cursor.
+
+Invoice ::: <Supplier’s Name>
+Part Id        Part Name         Quantity          Unit Price         Total Price
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------
+******************************************************************************************
+SQL> desc supplier;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ SID                                                               NOT NULL NUMBER(4)
+ SNAME                                                                      VARCHAR2(30)
+ CONTACTNUM                                                                 VARCHAR2(40)
+
+SQL> desc parts;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ PID                                                               NOT NULL NUMBER(4)
+ PNAME                                                                      VARCHAR2(30)
+ COLOR                                                                      VARCHAR2(30)
+ UNIT_RATE                                                                  NUMBER(7,2)
+
+SQL> desc catalog;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ SID                                                                        NUMBER(4)
+ PID                                                                        NUMBER(4)
+ QTY                                                                        NUMBER(5)
+SQL> select *from supplier;
+
+       SID SNAME                          CONTACTNUM
+---------- ------------------------------ ----------------------------------------
+         1 Ruchita                        90001
+         2 Kavita                         90001
+         3 Kaushik                        90001
+
+SQL> select *from parts;
+
+       PID PNAME                          COLOR                           UNIT_RATE
+---------- ------------------------------ ------------------------------ ----------
+         1 a                              blue                                  400
+         2 b                              red                                   200
+         3 c                              red                                   700
+
+SQL> select *from catalog;
+
+       SID        PID        QTY
+---------- ---------- ----------
+         1          1          4
+         1          2         14
+         2          1         10
+         2          3         10
+         3          1         10
+********************************************************************************************
+declare
+	tsid supplier.sid%type;
+	tpid parts.pid%type;
+	tpname parts.pname%type;
+	tunit_rate parts.unit_rate%type;
+	tqty catalog.qty%type;
+	ttotal number;
+	no number;
+	cursor c_supplier(no number) is select p.pid,p.pname,c.qty,p.unit_rate,(c.qty*p.unit_rate) "Total Price" 
+	from parts p,catalog c,supplier s where p.pid=c.pid and s.sid=c.sid and s.sid = no;
+begin 
+	no:=&no;
+	if not c_supplier%isopen then
+	OPEN c_supplier(no);
+	end if;
+	
+	fetch c_supplier into tpid,tpname,tqty,tunit_rate,ttotal;
+	dbms_output.put_line('***************************');
+	dbms_output.put_line('Invoice Details');
+	dbms_output.put_line('***************************');
+	dbms_output.put_line('Part_id:    '||'|'||tpid);
+	dbms_output.put_line('Part_Name:  '||'|'||tpname);
+	dbms_output.put_line('Qty:        '||'|'||tqty);
+	dbms_output.put_line('Unit_rate:  '||'|'||tunit_rate);	
+	dbms_output.put_line('Total_price:'||'|'||ttotal);
+
+	dbms_output.put_line('***************************');
+	
+	if c_supplier%notfound then
+		dbms_output.put_line('Record does not exist');
+	end if;
+	
+	if c_supplier%isopen then
+	CLOSE c_supplier;
+	end if;
+END;
+*********************************************************************************************
+Output:
+
+Enter value for no: 1
+old  11:  no:=&no;
+new  11:  no:=1;
+***************************
+Invoice Details
+***************************
+Part_id:    |1
+Part_Name:  |a
+Qty:        |4
+Unit_rate:  |400
+Total_price:|1600
+***************************
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+
+***********************************************************************************************
+declare
+	psid supplier.sid%type;
+	psname supplier.sname%type;
+	ppid parts.pid%type;
+	pname parts.pname%type;
+	punit_rate parts.unit_rate%type;
+	pqty catalog.qty%type;
+	no number;
+	ptotal number;
+	cursor f1(no number) is select s.sid,s.sname,p.pid,p.pname,p.unit_rate,c.qty,(c.qty*p.unit_rate) "Total Price" from supplier s,parts p,catalog c where s.sid=c.sid and p.pid=c.pid and s.sid=no;
+begin
+	no:=&no;
+	if not f1%isopen then
+	open f1(no);
+	end if;
+	fetch f1 into psid,psname,ppid,pname,punit_rate,pqty,ptotal;
+	dbms_output.put_line('************************************************************************************');
+	dbms_output.put_line('Supplier Name: '||psname);
+	dbms_output.put_line('************************************************************************************');
+	dbms_output.put_line('Part_id    part_name      Unit_rate       Quantity         Total');
+	dbms_output.put_line('************************************************************************************');
+	dbms_output.put_line('  '||ppid||'             '||pname||'              '||punit_rate||'                '||pqty||'          '||ptotal);
+	dbms_output.put_line('************************************************************************************');
+	if f1%notfound then
+		dbms_output.put_line('Record does not exist');
+	end if;
+	if f1%isopen then
+	close f1;
+	end if;
+end;	
+***********************************************************************************************
+Output:
+
+Enter value for no: 1
+old  12:  no:=&no;
+new  12:  no:=1;
+************************************************************************************
+Supplier Name: Ruchita
+************************************************************************************
+Part_id    part_name      Unit_rate       Quantity         Total
+************************************************************************************
+1             a              400                4          1600
+************************************************************************************
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

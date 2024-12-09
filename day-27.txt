@@ -1,0 +1,41 @@
+QUESTION...
+
+
+
+Essential List (Practical) 
+1 Write a PL/SQL block to increase the salary by 10% Rs. 6000) of the Employee whose 
+Job=’Accounting’ and display the count total number of employees whose job=’Accounting (Use 
+Cursor) 
+
+
+ANSWER...
+
+
+
+SQL> DECLARE
+  2    CURSOR emp_cursor IS
+  3      SELECT EMPNO, SAL FROM EMP4 WHERE JOB = 'Accounting';
+  4    v_empno EMP4.EMPNO%TYPE;
+  5    v_sal EMP4.SAL%TYPE;
+  6    v_count NUMBER := 0;
+  7  BEGIN
+  8    OPEN emp_cursor;
+  9    LOOP
+ 10      FETCH emp_cursor INTO v_empno, v_sal;
+ 11      EXIT WHEN emp_cursor%NOTFOUND;
+ 12
+ 13      UPDATE EMP4
+ 14      SET SAL = v_sal + (v_sal * 0.10) + 6000
+ 15      WHERE EMPNO = v_empno;
+ 16
+ 17      v_count := v_count + 1;
+ 18    END LOOP;
+ 19    CLOSE emp_cursor;
+ 20
+ 21    DBMS_OUTPUT.PUT_LINE('Total number of employees with job = ''Accounting'': ' || v_count);
+ 22    COMMIT;
+ 23  END;
+ 24  /
+Total number of employees with job = 'Accounting': 0
+
+PL/SQL procedure successfully completed.

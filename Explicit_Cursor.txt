@@ -1,0 +1,23 @@
+/* Update the bonus of all employees with respect to their deptatment bonus and their salary*/
+
+declare
+cursor add_salary is select emp_name, salary, d.bonus from emp e, dept_master d where
+e.emp_dept=d.d_id;
+
+enm emp.emp_name%type;
+sal emp.salary%type;
+bon dept_master.bonus%type;
+
+begin
+   open add_salary;
+   if add_salary%isopen then
+   loop
+           fetch add_salary into enm, sal, bon;
+           exit when add_salary%notfound;
+           update emp set bonus = sal*bon where emp_name = enm;
+   end loop;
+   else
+           dbms_output.put_line('Unable to open cursor');
+   end if;
+   close add_salary;
+end;

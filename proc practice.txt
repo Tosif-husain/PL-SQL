@@ -1,0 +1,51 @@
+CREATE TABLE dept (
+    deptno NUMBER PRIMARY KEY,   -- Department Number
+    dname VARCHAR2(50)           -- Department Name
+);
+CREATE TABLE emp (
+    empno NUMBER PRIMARY KEY,    -- Employee Number
+    ename VARCHAR2(50),          -- Employee Name
+    sal NUMBER,                  -- Employee Salary
+    deptno NUMBER,               -- Department Number
+    CONSTRAINT fk_dept FOREIGN KEY (deptno) REFERENCES dept(deptno)
+);
+
+*************************************
+INSERT INTO dept (deptno, dname) VALUES (10, 'Sales');
+INSERT INTO dept (deptno, dname) VALUES (20, 'HR');
+INSERT INTO dept (deptno, dname) VALUES (30, 'IT');
+
+INSERT INTO dept (deptno, dname) VALUES (10, 'Sales');
+INSERT INTO dept (deptno, dname) VALUES (20, 'HR');
+INSERT INTO dept (deptno, dname) VALUES (30, 'IT');
+*************************************************************************
+
+INSERT INTO emp (empno, ename, sal, deptno) VALUES (1001, 'John', 5000, 10);
+INSERT INTO emp (empno, ename, sal, deptno) VALUES (1002, 'Jane', 6000, 10);
+INSERT INTO emp (empno, ename, sal, deptno) VALUES (1003, 'Bob', 4500, 20);
+INSERT INTO emp (empno, ename, sal, deptno) VALUES (1004, 'Alice', 7000, 30);
+
+***************************************************
+
+DECLARE
+    total NUMBER;
+    max_salary NUMBER;
+BEGIN
+    count_emp(10, total, max_salary);
+    dbms_output.put_line('Total Employees: ' || total);
+    dbms_output.put_line('Max Salary: ' || max_salary);
+END;
+/
+ create or replace procedure lj(id in int) is
+    name emp.ename%type;
+    cursor c is select ename from emp where  empno=id;
+    begin
+    open c;
+    loop
+    fetch c into name;
+    exit when c%notfound;
+    dbms_output.put_line(name);
+   end loop;
+   close c;
+   end;
+   /

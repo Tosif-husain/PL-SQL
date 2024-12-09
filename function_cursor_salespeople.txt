@@ -1,0 +1,54 @@
+Implement function printsalesperson which returns 
+Boolean true and displays sname,city from salespeople.
+***********************************************************
+SQL> desc salespeople
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ S_ID                                               NUMBER(2)
+ SNAME                                              VARCHAR2(20)
+ CITY                                               VARCHAR2(20)
+SQL> select *from salespeople;
+
+      S_ID SNAME                CITY
+---------- -------------------- --------------------
+         1 Jigar                London
+         2 Palash               London
+         3 Aaditya              Berlin
+***********************************************************
+Solution: 
+***********************************************************
+create or replace function printsalesperson
+  return boolean is
+ 	cursor cs is select * from salespeople ;
+ begin
+    dbms_output.put_line('********************************************');
+    dbms_output.put_line('Salesperson Name     Salesperson No   City');
+    dbms_output.put_line('********************************************');
+
+ for i in cs
+ loop
+	dbms_output.put_line(rpad(i.sname,15,' ')||'  '||lpad(i.s_id,15,' ')||'  '|| lpad(i.city,10,' '));
+ end loop;
+ return true;
+end;
+***********************************************************
+Pl Sql Block For calling the function..
+***********************************************************
+declare
+    flag boolean;
+begin
+    flag:=printsalesperson();
+end;
+  
+***********************************************************
+Result:
+********************************************
+Salesperson Name     Salesperson No   City
+********************************************
+Jigar                          1      London
+Palash                         2      London
+Aaditya                        3      Berlin
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

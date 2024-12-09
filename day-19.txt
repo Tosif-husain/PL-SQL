@@ -1,0 +1,105 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Write a pl/sql block to read the salary of an employee 10 and display the appropriate message if 
+it lies in the range of 1000 and 3000 
+
+
+ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_empno NUMBER := 10;
+  3      v_salary EMP4.sal%TYPE;
+  4
+  5  BEGIN
+  6      SELECT sal
+  7      INTO v_salary
+  8      FROM EMP4
+  9      WHERE empno = v_empno;
+ 10
+ 11      IF v_salary BETWEEN 1000 AND 3000 THEN
+ 12          DBMS_OUTPUT.PUT_LINE('The salary of employee 10 is within the range of 1000 and 3000: ' || v_salary);
+ 13      ELSE
+ 14          DBMS_OUTPUT.PUT_LINE('The salary of employee 10 is outside the range of 1000 and 3000: ' || v_salary);
+ 15      END IF;
+ 16
+ 17  EXCEPTION
+ 18      WHEN NO_DATA_FOUND THEN
+ 19          DBMS_OUTPUT.PUT_LINE('No employee found with employee number: ' || v_empno);
+ 20      WHEN OTHERS THEN
+ 21          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 22  END;
+ 23  /
+No employee found with employee number: 10
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION...
+
+
+Desirable List (Practical): 
+1 Write a pl/sql block to get the details of marks (rollno, mark1, mark2, and grade) out of 100 for 
+marks1 and marks2 respectively. Display the grade in table marks using if statements as specified 
+below if stud_percent > 70 then grade is ‘A’,if stud_percent>60 and 70 then grade is ‘B’ else give 
+grade is ‘C’. 
+
+
+ANSWER...
+
+
+SQL> SET SERVEROUTPUT ON;
+SQL>
+SQL> DECLARE
+  2      v_rollno NUMBER;
+  3      v_mark1 NUMBER;
+  4      v_mark2 NUMBER;
+  5      v_stud_percent NUMBER;
+  6      v_grade CHAR(1);
+  7
+  8  BEGIN
+  9      v_rollno := &rollno;
+ 10      v_mark1 := &mark1;
+ 11      v_mark2 := &mark2;
+ 12
+ 13      v_stud_percent := (v_mark1 + v_mark2) / 2;
+ 14
+ 15      IF v_stud_percent > 70 THEN
+ 16          v_grade := 'A';
+ 17      ELSIF v_stud_percent > 60 THEN
+ 18          v_grade := 'B';
+ 19      ELSE
+ 20          v_grade := 'C';
+ 21      END IF;
+ 22
+ 23      DBMS_OUTPUT.PUT_LINE('Roll Number: ' || v_rollno);
+ 24      DBMS_OUTPUT.PUT_LINE('Mark 1: ' || v_mark1);
+ 25      DBMS_OUTPUT.PUT_LINE('Mark 2: ' || v_mark2);
+ 26      DBMS_OUTPUT.PUT_LINE('Student Percentage: ' || v_stud_percent);
+ 27      DBMS_OUTPUT.PUT_LINE('Grade: ' || v_grade);
+ 28
+ 29  EXCEPTION
+ 30      WHEN OTHERS THEN
+ 31          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 32  END;
+ 33  /
+Enter value for rollno: 1
+old   9:     v_rollno := &rollno;
+new   9:     v_rollno := 1;
+Enter value for mark1: 2
+old  10:     v_mark1 := &mark1;
+new  10:     v_mark1 := 2;
+Enter value for mark2: 3
+old  11:     v_mark2 := &mark2;
+new  11:     v_mark2 := 3;
+Roll Number: 1
+Mark 1: 2
+Mark 2: 3
+Student Percentage: 2.5
+Grade: C
+
+PL/SQL procedure successfully completed.

@@ -1,0 +1,32 @@
+Implement function which takes input number 
+and returns square of number.
+**************************************************************
+Solution: 
+**************************************************************
+create or replace function square(i in number)
+  return number as
+begin
+    return (i*i);
+end;
+**************************************************************
+Pl Sql Block For calling the function..
+**************************************************************
+declare
+begin
+dbms_output.put_line(square(786));
+end;
+**************************************************************
+Output:
+**************************************************************
+617796
+
+PL/SQL procedure successfully completed.
+
+**************************************************************
+Later calling function saprately 
+**************************************************************
+ SELECT Square(200) FROM dual;
+
+SQUARE(200)
+-----------
+      40000

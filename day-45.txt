@@ -1,0 +1,69 @@
+QUESTION...
+
+
+Essential List (Practical/Theory) 
+1 Subject_Master (Sub_code, Sub_name) 
+Student_Master (Roll_no, Stud_Name, Gender, DOB, Address) 
+Result (Roll_No, Sub_code, Marks) 
+ 
+ Find out the average score in percentage for each subject. 
+ Find out the students whose birthday falls into leap year.
+
+
+ANSWER...
+
+
+
+SQL> SELECT
+  2      sm.Sub_code,
+  3      sm.Sub_name,
+  4      AVG(r.Marks) AS Average_Marks,
+  5      (AVG(r.Marks) / 100) * 100 AS Average_Percentage
+  6  FROM
+  7      Subject_Master sm
+  8  JOIN
+  9      Result r ON sm.Sub_code = r.Sub_code
+ 10  GROUP BY
+ 11      sm.Sub_code, sm.Sub_name;
+
+  SUB_CODE SUB_NAME                                                                                             AVERAGE_MARKS AVERAGE_PERCENTAGE
+---------- ---------------------------------------------------------------------------------------------------- ------------- ------------------
+       101 Mathematics                                                                                             84.3333333         84.3333333
+       102 Physics                                                                                                 87.3333333         87.3333333
+       103 Chemistry
+86.5                86.5
+
+SQL> SELECT
+  2      Roll_no,
+  3      Stud_Name,
+  4      Gender,
+  5      DOB,
+  6      Address
+  7  FROM
+  8      Student_Master
+  9  WHERE
+ 10      MOD(EXTRACT(YEAR FROM DOB), 4) = 0
+ 11      AND (MOD(EXTRACT(YEAR FROM DOB), 100) != 0 OR MOD(EXTRACT(YEAR FROM DOB), 400) = 0);
+
+   ROLL_NO STUD_NAME                                                                                            GENDER     DOB
+---------- ---------------------------------------------------------------------------------------------------- ---------- ---------
+ADDRESS
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         1 John Doe                                                                                             Male       29-FEB-00
+123 Main St, New York
+
+         3 Emily Davis                                                                                          Female     01-MAR-04
+789 Oak St, Chicago
+
+         4 Michael Brown                                                                                        Male       28-FEB-00
+321 Pine St, Houston
+
+
+   ROLL_NO STUD_NAME                                                                                            GENDER     DOB
+---------- ---------------------------------------------------------------------------------------------------- ---------- ---------
+ADDRESS
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         5 Sarah Wilson                                                                                         Female     29-FEB-00
+654 Maple St, Phoenix
+
+

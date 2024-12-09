@@ -1,0 +1,44 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create a procedure to display the sum of salary of the employees whose job is accepted by the 
+user. 
+
+
+ANSWER...
+
+
+SQL> CREATE OR REPLACE PROCEDURE SumSalaryByJob (
+  2      p_job IN VARCHAR2
+  3  ) AS
+  4      total_salary NUMBER; -- Variable to hold the sum of salaries
+  5  BEGIN
+  6      SELECT SUM(SAL)
+  7      INTO total_salary
+  8      FROM EMP4
+  9      WHERE JOB = p_job;
+ 10
+ 11      DBMS_OUTPUT.PUT_LINE('Total salary for job "' || p_job || '": ' || NVL(total_salary, 0));
+ 12  EXCEPTION
+ 13      WHEN NO_DATA_FOUND THEN
+ 14          DBMS_OUTPUT.PUT_LINE('No employees found for job: ' || p_job);
+ 15      WHEN OTHERS THEN
+ 16          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 17  END SumSalaryByJob;
+ 18  /
+
+Procedure created.
+
+SQL> BEGIN
+  2      SumSalaryByJob('MANAGER'); -- Replace 'MANAGER' with the desired job title
+  3  END;
+  4  /
+
+PL/SQL procedure successfully completed.
+
+SQL> set serveroutput on;
+SQL> /
+Total salary for job "MANAGER": 23494.24
+
+PL/SQL procedure successfully completed.

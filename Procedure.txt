@@ -1,0 +1,34 @@
+Write a procedure that takes as input the department number 
+and passes two parameters – one giving the total number of employees 
+in that department and the other giving the maximum salary in that department.
+ 
+ 
+
+  CREATE OR REPLACE PROCEDURE count_emp (
+    d IN DEPT.DEPTNO%TYPE,
+    tot OUT NUMBER,
+    msal OUT NUMBER
+) IS
+BEGIN
+    SELECT COUNT(*), MAX(SAL)
+    INTO tot, msal
+    FROM EMP
+    WHERE DEPTNO = d;
+END;
+
+
+
+
+
+
+
+
+DECLARE
+    no EMP.DEPTNO%TYPE;
+    totl NUMBER(3);
+    max_sal NUMBER(10);
+BEGIN
+    no := &no; -- Prompt user for department number
+    count_emp(no, totl, max_sal);
+    DBMS_OUTPUT.PUT_LINE('Total Employees: ' || totl || ' Maximum Salary: ' || max_sal);
+END;

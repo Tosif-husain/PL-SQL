@@ -1,0 +1,72 @@
+Create a procedure to display Employee details of a given employee number.
+SQL> desc emp_mstr;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ E_ID                                      NOT NULL NUMBER(2)
+ FIRST_NAME                                         VARCHAR2(30)
+ LAST_NAME                                          VARCHAR2(30)
+ SALARY                                             NUMBER(8,2)
+
+SQL> select *from emp_mstr;
+
+      E_ID FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+         1 Ruchita                        Vyas                                 5000
+         2 Komal                          Trivedi                             15000
+         3 Vikas                          Gokhale                             10000
+         4 Nikunj                         Patel                                2000
+         5 Manish                         Shah                                12000
+
+**********************************************************************
+Demo1- out 2.	OUT : OUT parameter referring to the procedure or function and allow to overwritten the value of parameter.
+**********************************************************************
+CREATE or REPLACE PROCEDURE pro1(no in number,temp out emp_mstr%rowtype)
+IS
+BEGIN
+    SELECT * INTO temp FROM emp_mstr WHERE e_id = no;
+END;
+**********************************************************************
+Output:
+**********************************************************************
+/
+Procedure created.
+
+SQL> pro1
+1
+**********************************************************************
+Call procedure inside a block or cursor
+**********************************************************************
+DECLARE
+    temp emp_mstr%rowtype;
+    no number :=&no;
+BEGIN
+    pro1(no,temp);
+    dbms_output.put_line('****************************************************');
+    dbms_output.put_line('Employee Details :');
+    dbms_output.put_line('****************************************************');
+    dbms_output.put_line('Id     First Name     Last Name      Salary');
+    dbms_output.put_line('****************************************************');
+    dbms_output.put_line(temp.e_id||'      '||temp.first_name||'          '||temp.last_name||'         '||temp.salary);
+    dbms_output.put_line('****************************************************');
+EXCEPTION
+	when no_data_found then
+		dbms_output.put_line('Record not Found');
+END;
+**********************************************************************
+Output:
+**********************************************************************
+SQL> /
+Enter value for no: 2
+old   3:     no number :=&no;
+new   3:     no number :=2;
+****************************************************
+Employee Details :
+****************************************************
+Id     First Name     Last Name      Salary
+****************************************************
+2      Komal          Trivedi         15000
+****************************************************
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

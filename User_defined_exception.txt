@@ -1,0 +1,28 @@
+The acct_master records the current balance for an account, which is updated whenever, any deposits takes place. 
+If the withdrawal attempted is more then the current balance held in the account,
+a user-defined exception is raised displaying an appropriate error message
+
+Declare
+      more_than_balance EXCEPTION;
+      vacno acct_master.acno%type;
+      vtrans number(5);
+      vbalance acct_master.balance%type;
+       op char(1);
+ begin
+        vacno:=&vacno;
+         vtrans:=&vtrans;
+         op:=‘&op’;
+        select balance into vbalance from bank where acno=vacno;
+  if op=‘w’ then
+          if vbalance > vtrans then
+                    update bank set balance=balance-vtrans where acno=vacno;
+         else
+                 raise more_than_balance;
+          end if;
+  elsif op=‘d’ then
+            update bank set balance=balance+vtrans where acno=vacno;
+   end if;
+   exception 
+           when more_than_balance then
+                    dbms_outpu.put_line (‘ No enough balance’);
+End;

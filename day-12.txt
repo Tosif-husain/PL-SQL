@@ -1,0 +1,82 @@
+					QUESTION...
+
+Essential List (Practical) 
+1 Use Following Tables and solve given queries:  
+Employee (Eid,EName,Department,Job,Salary) 
+ Write a pl/sql block to print the name and job of an employee who is working as ‘clerk’ earning 
+salary of Rs 1700.
+
+
+					ANSWER...
+
+SQL> DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT EName, Job
+  4          FROM Employee101
+  5          WHERE Job = 'clerk' AND Salary = 1700;
+  6
+  7      v_EName  VARCHAR2(50);
+  8      v_Job    VARCHAR2(50);
+  9  BEGIN
+ 10      OPEN emp_cursor;
+ 11
+ 12      LOOP
+ 13          FETCH emp_cursor INTO v_EName, v_Job;
+ 14          EXIT WHEN emp_cursor%NOTFOUND;
+ 15
+ 16          DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_EName || ', Job: ' || v_Job);
+ 17      END LOOP;
+ 18
+ 19      CLOSE emp_cursor;
+ 20
+ 21  EXCEPTION
+ 22      WHEN NO_DATA_FOUND THEN
+ 23          DBMS_OUTPUT.PUT_LINE('No employee found with the job of clerk earning Rs 1700.');
+ 24  END;
+ 25  /
+Employee Name: John Doe, Job: clerk
+Employee Name: Bob Johnson, Job: clerk
+
+PL/SQL procedure successfully completed.
+
+					QUESTION...
+
+
+Desirable List (Practical): 
+1 Using above table Solve following queries.  
+1. Write a pl/sql block to display all employees’ name and salary whose salary is more than 2000. 
+
+
+					ANSWER...
+
+
+
+SQL> DECLARE
+  2      CURSOR emp_cursor IS
+  3          SELECT EName, Salary
+  4          FROM Employee101
+  5          WHERE Salary > 2000;
+  6
+  7      v_EName  VARCHAR2(50);
+  8      v_Salary DECIMAL(10, 2);
+  9  BEGIN
+ 10      OPEN emp_cursor;
+ 11
+ 12      LOOP
+ 13          FETCH emp_cursor INTO v_EName, v_Salary;
+ 14          EXIT WHEN emp_cursor%NOTFOUND;
+ 15
+ 16          DBMS_OUTPUT.PUT_LINE('Employee Name: ' || v_EName || ', Salary: ' || v_Salary);
+ 17      END LOOP;
+ 18
+ 19      CLOSE emp_cursor;
+ 20
+ 21  EXCEPTION
+ 22      WHEN OTHERS THEN
+ 23          DBMS_OUTPUT.PUT_LINE('An error occurred.');
+ 24  END;
+ 25  /
+Employee Name: Jane Smith, Salary: 3000
+Employee Name: Alice Davis, Salary: 2500
+
+PL/SQL procedure successfully completed.

@@ -1,0 +1,33 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 Create table: 
+EmployeeInformation: (Emp_No. , Emp_Name , Emp_Dept. , Emp_Salary) 
+In employee information table update the employee name 'AADITYA' department 'Program 
+Developer' changes to 'Web Developer' using implicit cursor. 
+
+
+ANSWER...
+
+
+SQL> CREATE TABLE EmployeeInformation (
+  2    Emp_No NUMBER PRIMARY KEY,
+  3    Emp_Name VARCHAR2(50),
+  4    Emp_Dept VARCHAR2(50),
+  5    Emp_Salary NUMBER
+  6  );
+
+Table created.
+
+SQL>
+SQL> BEGIN
+  2    UPDATE EmployeeInformation
+  3    SET Emp_Dept = 'Web Developer'
+  4    WHERE Emp_Name = 'AADITYA' AND Emp_Dept = 'Program Developer';
+  5
+  6    COMMIT;
+  7  END;
+  8  /
+
+PL/SQL procedure successfully completed.

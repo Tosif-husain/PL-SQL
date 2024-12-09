@@ -1,0 +1,36 @@
+#Create a cursor which displays employee number, name and salary.
+#Records should be displayed by salary.(Use cursor)
+
+DECLARE
+
+         n_sal emp.salary%type;
+         v_empno emp.emp_no%type;
+         v_empname emp.emp_name%type;
+
+	cursor c1 is
+		select emp_no,emp_name,salary
+		from emp
+		order by salary; 
+
+  BEGIN
+
+        dbms_output.put_line('************************************************');
+        dbms_output.put_line('Emp#       Name                       Salary');
+        dbms_output.put_line('************************************************');
+	open c1;
+	loop
+		fetch c1 into v_empno,v_empname,n_sal;
+
+		if c1%NOTFOUND THEN
+			exit;
+		end if;
+
+		
+        dbms_output.put_line(v_empno||'  '||v_empname||'  '||to_char(n_sal));
+
+	end loop;
+
+close c1;
+
+END;
+/

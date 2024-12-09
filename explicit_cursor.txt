@@ -1,0 +1,99 @@
+SQL> CREATE TABLE DEPT_MASTER50 (
+  2      D_ID NUMBER PRIMARY KEY,
+  3      BONUS NUMBER(5, 2)
+  4  );
+
+Table created.
+
+SQL>
+SQL> -- Inserting sample data into DEPT_MASTER
+SQL> INSERT INTO DEPT_MASTER50 (D_ID, BONUS) VALUES (1, 0.10);
+
+1 row created.
+
+SQL> INSERT INTO DEPT_MASTER50 (D_ID, BONUS) VALUES (2, 0.15);
+
+1 row created.
+
+SQL> INSERT INTO DEPT_MASTER50 (D_ID, BONUS) VALUES (3, 0.20);
+
+1 row created.
+
+
+SQL> select * from dept_master50;
+
+      D_ID      BONUS
+---------- ----------
+         1         .1
+         2        .15
+         3         .2
+
+
+
+SQL> CREATE TABLE EMP50 (
+  2      EMP_NAME VARCHAR2(50),
+  3      SALARY NUMBER(10, 2),
+  4      EMP_DEPT NUMBER,
+  5      BONUS NUMBER(10, 2),
+  6      CONSTRAINT FK_EMP_DEPT FOREIGN KEY (EMP_DEPT) REFERENCES DEPT_MASTER50(D_ID)
+  7  );
+
+Table created.
+
+SQL> INSERT INTO EMP50 (EMP_NAME, SALARY, EMP_DEPT, BONUS) VALUES ('Alice', 50000, 1, NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP50 (EMP_NAME, SALARY, EMP_DEPT, BONUS) VALUES ('Bob', 60000, 2, NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP50 (EMP_NAME, SALARY, EMP_DEPT, BONUS) VALUES ('Charlie', 55000, 3, NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP50 (EMP_NAME, SALARY, EMP_DEPT, BONUS) VALUES ('Diana', 62000, 1, NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP50 (EMP_NAME, SALARY, EMP_DEPT, BONUS) VALUES ('Evan', 48000, 2, NULL);
+
+1 row created.
+
+
+
+SQL> select * from emp50;
+
+EMP_NAME                                               SALARY   EMP_DEPT      BONUS
+-------------------------------------------------- ---------- ---------- ----------
+Alice                                                   50000          1
+Bob                                                     60000          2
+Charlie                                                 55000          3
+Diana                                                   62000          1
+Evan                                                    48000          2
+
+
+SQL> declare
+  2  cursor add_salary is select emp_name, salary, d.bonus from emp50 e, dept_master50 d where
+  3  e.emp_dept=d.d_id;
+  4
+  5  enm emp50.emp_name%type;
+  6  sal emp50.salary%type;
+  7  bon dept_master50.bonus%type;
+  8
+  9  begin
+ 10     open add_salary;
+ 11     if add_salary%isopen then
+ 12     loop
+ 13             fetch add_salary into enm, sal, bon;
+ 14             exit when add_salary%notfound;
+ 15             update emp50 set bonus = sal*bon where emp_name = enm;
+ 16     end loop;
+ 17     else
+ 18             dbms_output.put_line('Unable to open cursor');
+ 19     end if;
+ 20     close add_salary;
+ 21  end;
+ 22  /
+
+PL/SQL procedure successfully completed.

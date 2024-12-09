@@ -1,0 +1,59 @@
+//%ROW TYPE...
+
+SQL>  DECLARE
+  2  employee_record employee%ROWTYPE;
+  3  BEGIN
+  4  SELECT * INTO employee_record FROM employee WHERE imp_id = 101;
+  5  dbms_output.put_line('employee name: ' || employee_record.emp_name);
+  6   dbms_output.put_line('employee_id: ' || employee_record.imp_id);
+  7  end;
+  8  /
+employee name: tosif
+employee_id: 101
+
+
+
+//%type...
+
+SQL> declare
+  2  v_sid student5.sId%type;
+  3  c_sname student5.sName%type;
+  4  v_sage student5.sAge%type;
+  5  begin
+  6  v_sid := 102;
+  7  c_sname := 'tosif';
+  8  v_sage := 20;
+  9
+ 10  dbms_output.put_line('sId: ' || v_sid);
+ 11  dbms_output.put_line('sName: ' || c_sname);
+ 12  dbms_output.put_line('sAge: ' || v_sage);
+ 13  end;
+ 14  /
+sId: 102
+sName: tosif
+sAge: 20
+
+//for loop...
+
+DECLARE
+    v_emp_id EMPLOYEES.Emp_ID%TYPE;
+    v_emp_name EMPLOYEES.Emp_Name%TYPE;
+BEGIN
+    -- Loop to insert 5 employees
+    FOR i IN 1..5 LOOP
+        -- Assign values
+        v_emp_id := i; -- Example employee ID
+        v_emp_name := 'Employee_' || TO_CHAR(i); -- Example employee name
+
+        -- Insert a new record into the EMPLOYEES table
+        INSERT INTO EMPLOYEES (Emp_ID, Emp_Name)
+        VALUES (v_emp_id, v_emp_name);
+
+        -- Output the result for each iteration
+        DBMS_OUTPUT.PUT_LINE('Inserted record ' || i || ': ID = ' || v_emp_id || ', Name = ' || v_emp_name);
+    END LOOP;
+
+    -- Commit the transaction to save the changes
+    COMMIT;
+END;
+/

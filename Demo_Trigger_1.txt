@@ -1,0 +1,53 @@
+create a trigger on insert for emp_mstr, when user enter a record it will
+convert first name and last name into upper case
+**************************************************************************
+SQL> desc emp_mstr;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- -------------------------------------
+ E_ID                                                              NOT NULL NUMBER(2)
+ FIRST_NAME                                                                 VARCHAR2(30)
+ LAST_NAME                                                                  VARCHAR2(30)
+ SALARY                                                                     NUMBER(8,2)
+
+SQL> select *from emp_mstr;
+
+      E_ID FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+         1 Ruchita                        Vyas                                 5000
+         2 Komal                          Trivedi                             15000
+         3 Vikas                          Gokhale                             10000
+         4 Nikunj                         Patel                                2000
+         5 Manish                         Shah                                12000
+**************************************************************************
+
+create or replace trigger trg1
+before
+	insert on emp_mstr 
+	for each row
+begin
+	:new.first_name:=upper(:new.first_name);
+	:new.last_name:=upper(:new.last_name);
+end;
+**************************************************************************
+Output
+**************************************************************************
+    /
+
+Trigger created.
+SQL> insert into emp_mstr values(1,'Jigesh','Shastri',12000);
+
+1 row created.
+
+Commit complete.
+SQL> select *from emp_mstr;
+
+      E_ID FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+         1 Ruchita                        Vyas                                 5000
+         2 Komal                          Trivedi                             15000
+         3 Vikas                          Gokhale                             10000
+         4 Nikunj                         Patel                                2000
+         5 Manish                         Shah                                12000
+         6 JIGESH                         SHASTRI                             12000
+
+6 rows selected.

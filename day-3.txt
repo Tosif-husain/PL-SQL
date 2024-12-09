@@ -1,0 +1,147 @@
+                               QUESTION 1...
+
+Essential List (Practical) 
+1. Create the above four tables along with key constraints. 2. Write an Insert script for insertion of 
+rows with substitution variables 3. Insert appropriate data 
+Add a column – “color” to the Item table.  
+1. Display the column Item name and Price in sentence form using Concatenation.
+
+                              ANSWER...
+
+SQL> CREATE TABLE EMP51 (
+  2      EMP_ID INT PRIMARY KEY,
+  3      EMP_NAME VARCHAR(50),
+  4      DEPT_ID INT,
+  5      SALARY DECIMAL(10, 2),
+  6      FOREIGN KEY (DEPT_ID) REFERENCES DEPT(DEPT_ID)
+  7  );
+
+Table created.
+
+SQL>
+SQL> CREATE TABLE DEPart5 (
+  2      DEPT_ID INT PRIMARY KEY,
+  3      DEPT_NAME VARCHAR(50),
+  4      LOCATION VARCHAR(50)
+  5  );
+
+Table created.
+
+SQL> CREATE TABLE PRODUCTS (
+  2      PRODUCT_ID INT PRIMARY KEY,
+  3      PRODUCT_NAME VARCHAR(50),
+  4      PRICE DECIMAL(10, 2),
+  5      COLOR VARCHAR(20)
+  6  );
+
+Table created.
+
+SQL>
+SQL> CREATE TABLE ORDER_DETAILS (
+  2      ORDER_ID INT PRIMARY KEY,
+  3      PRODUCT_ID INT,
+  4      QUANTITY INT,
+  5      TOTAL_PRICE DECIMAL(10, 2),
+  6      FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCTS(PRODUCT_ID)
+  7  );
+
+Table created.
+
+INSERT INTO EMP51 (EMP_ID, EMP_NAME, DEPT_ID, SALARY) 
+VALUES (&EMP_ID, '&EMP_NAME', &DEPT_ID, &SALARY);
+
+INSERT INTO DEPart5 (DEPT_ID, DEPT_NAME, LOCATION) 
+VALUES (&DEPT_ID, '&DEPT_NAME', '&LOCATION');
+
+INSERT INTO PRODUCTS (PRODUCT_ID, PRODUCT_NAME, PRICE, COLOR) 
+VALUES (&PRODUCT_ID, '&PRODUCT_NAME', &PRICE, '&COLOR');
+
+INSERT INTO ORDER_DETAILS (ORDER_ID, PRODUCT_ID, QUANTITY, TOTAL_PRICE) 
+VALUES (&ORDER_ID, &PRODUCT_ID, &QUANTITY, &TOTAL_PRICE);
+
+
+INSERT INTO EMP51 (EMP_ID, EMP_NAME, DEPT_ID, SALARY) 
+VALUES (1, 'John Doe', 101, 5000.00);
+
+INSERT INTO DEPart5 (DEPT_ID, DEPT_NAME, LOCATION) 
+VALUES (101, 'Sales', 'New York');
+
+INSERT INTO PRODUCTS (PRODUCT_ID, PRODUCT_NAME, PRICE, COLOR) 
+VALUES (201, 'Laptop', 1200.00, 'Black');
+
+INSERT INTO ORDER_DETAILS (ORDER_ID, PRODUCT_ID, QUANTITY, TOTAL_PRICE) 
+VALUES (301, 201, 2, 2400.00);
+
+
+ALTER TABLE PRODUCTS ADD COLOR VARCHAR(20);
+
+
+SELECT PRODUCT_NAME || ' costs ' || PRICE || ' dollars.' 
+FROM PRODUCTS;
+
+SQL> SELECT PRODUCT_NAME || ' costs ' || PRICE || ' dollars.'
+  2  FROM PRODUCTS;
+
+PRODUCT_NAME||'COSTS'||PRICE||'DOLLARS.'
+--------------------------------------------------------------------------------
+Laptop costs 1200 dollars.
+
+                                        QUESTION...
+
+Desirable List (Practical): 
+. Display all the records of EMP table  
+ Display all the records of DEPT table  
+ Display only Name of all employees  
+ Display Employee’s Name and salary  
+Display only unique departments (deptno) from EMP table 
+
+                                      ANSWER...
+
+SELECT * FROM EMP51;
+
+SELECT * FROM DEPT;
+
+SELECT EMP_NAME FROM EMP;
+
+SELECT EMP_NAME, TOTAL FROM EMP;
+
+SELECT DISTINCT DEPT_ID FROM EMP;
+
+SQL> SELECT * FROM EMP51;
+
+EMP_NAME                 EMP_ID     PRICE1     PRICE2      TOTAL
+-------------------- ---------- ---------- ---------- ----------
+tosif                       101      10000      20000      30000
+yasin                       102       1000       2000
+arman                       103      10002      10003
+
+
+SQL> SELECT EMP_NAME FROM EMP;
+
+EMP_NAME
+--------------------
+tosif
+yasin
+arman
+
+SQL>  SELECT * FROM DEPart;
+
+   DEPT_ID DEPT_NAME                                          LOCATION
+---------- -------------------------------------------------- ----------------------------------------------------------------------------------------------------
+         1 BCA                                                ahmedabad
+         2 mca                                                surat
+         3 bcom                                               Mumbai
+
+SQL> SELECT EMP_NAME, total FROM EMP;
+
+EMP_NAME                  TOTAL
+-------------------- ----------
+tosif                     30000
+yasin
+arman
+
+SQL>
+
+
+
+

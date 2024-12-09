@@ -1,0 +1,37 @@
+SQL> select * from emp2;
+
+       EID ENAME                EJOB                     DEPTNO     SALARY
+---------- -------------------- -------------------- ---------- ----------
+         1 tosif                owner                        10       5000
+         2 arman                manager                      11       3000
+         3 anas                 worker                       12       1500
+         4 yasin                manager                      13       3000
+
+SQL> declare
+  2  tmp emp2%rowtype;
+  3  no number;
+  4  cursor c2(no number) is select * from emp2 where eid = no;
+  5  begin
+  6  no := &no;
+  7  open c2(no);
+  8  fetch c2 into tmp;
+  9  if c2%found then
+ 10  dbms_output.put_line('eid: '||tmp.eid);
+ 11   dbms_output.put_line('name: '||tmp.ename);
+ 12   dbms_output.put_line('dept no: '||tmp.deptno);
+ 13   dbms_output.put_line('salary: '||tmp.salary);
+ 14  else
+ 15   dbms_output.put_line('record not found');
+ 16  end if;
+ 17  close c2;
+ 18  end;
+ 19  /
+Enter value for no: 1
+old   6: no := &no;
+new   6: no := 1;
+eid: 1
+name: tosif
+dept no: 10
+salary: 5000
+
+PL/SQL procedure successfully completed.

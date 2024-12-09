@@ -1,0 +1,46 @@
+QUESTION...
+
+Essential List (Practical/Theory) 
+1 Use following tables and do as directed:  
+College(collegeId,collegeName,location) 
+Course(CourseId, CourseName,CourseDuration,EligibleStudents) 
+Class(collegeId,CourseId,ClassStartDate,ClassEndDate) 
+. Write a function that will return Eligible Students of a course by providing CourseId as a 
+parameter 
+
+
+ANSWER...
+
+
+
+
+SQL> CREATE OR REPLACE FUNCTION get_eligible_students(p_course_id IN NUMBER)
+
+  2  RETURN NUMBER
+  3  IS
+  4      v_eligible_students NUMBER;
+  5  BEGIN
+  6      SELECT EligibleStudents
+  7      INTO v_eligible_students
+  8      FROM Course
+  9      WHERE CourseId = p_course_id;
+ 10
+ 11      RETURN v_eligible_students;
+ 12  EXCEPTION
+ 13      WHEN NO_DATA_FOUND THEN
+ 14          RETURN NULL;  -- or raise an error if preferred
+ 15  END get_eligible_students;
+ 16  /
+
+Function created.
+
+SQL> DECLARE
+  2      v_students NUMBER;
+  3  BEGIN
+  4      v_students := get_eligible_students(1);  -- Replace 1 with the desired CourseId
+  5      DBMS_OUTPUT.PUT_LINE('Eligible Students: ' || v_students);
+  6  END;
+  7  /
+Eligible Students: 120
+
+PL/SQL procedure successfully completed.

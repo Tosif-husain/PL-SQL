@@ -1,0 +1,37 @@
+QUESTION...
+
+
+Essential List (Practical/Theory) 
+1 Use following tables and do as directed:  
+College(collegeId,collegeName,location) 
+Course (CourseId, CourseName, CourseDuration, 
+EligibleStudents,CourseStartDt.,CourseEndDt.) 
+Class(collegeId,CourseId,ClassStartDate,ClassEndDate) 
+Consider the above table and write a function to return the courseName  which started from 
+today today 
+
+ANSWER...
+
+
+SQL> SHOW ERRORS FUNCTION get_courses_started_today;
+Errors for FUNCTION GET_COURSES_STARTED_TODAY:
+
+LINE/COL ERROR
+-------- -----------------------------------------------------------------
+7/5      PL/SQL: SQL Statement ignored
+9/17     PL/SQL: ORA-00904: "COURSESTARTDT": invalid identifier
+SQL> CREATE OR REPLACE FUNCTION get_courses_started_today
+  2  RETURN SYS_REFCURSOR
+  3  IS
+  4      v_courses SYS_REFCURSOR;
+  5  BEGIN
+  6      OPEN v_courses FOR
+  7      SELECT CourseName
+  8      FROM Course
+  9      WHERE TRUNC(CourseStartDt) = TRUNC(SYSDATE);
+ 10
+ 11      RETURN v_courses;
+ 12  END;
+ 13  /
+
+Warning: Function created.

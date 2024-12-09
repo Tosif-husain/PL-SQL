@@ -1,0 +1,105 @@
+QUESTION...
+
+Essential List (Practical) 
+1 Use Following Tables: 
+ Emp_Master (Emp_Code, Emp_Name, Birth_Date)  
+Dept_Master (Dept_Code, Dept_Name, Budget)  
+Salary (Dept_Code, Emp_Code, Salary)  
+Write a pl/sql block to call a function that returns total employees in each department and 
+display them. Also handles the exception where no record found 
+
+
+ANSWER...
+
+
+
+SQL> CREATE OR REPLACE FUNCTION CountEmployeesByDept(dept_code IN NUMBER)
+  2  RETURN NUMBER AS
+  3      emp_count NUMBER;
+  4  BEGIN
+  5      SELECT COUNT(*)
+  6      INTO emp_count
+  7      FROM Salary
+  8      WHERE Dept_Code = dept_code;
+  9
+ 10      RETURN emp_count;
+ 11  EXCEPTION
+ 12      WHEN NO_DATA_FOUND THEN
+ 13          RETURN 0;
+ 14  END CountEmployeesByDept;
+ 15  /
+
+Function created.
+
+SQL>
+SQL> DECLARE
+  2      dept_rec Dept_Master%ROWTYPE;
+  3      total_employees NUMBER;
+  4  BEGIN
+  5      FOR dept_rec IN (SELECT * FROM Dept_Master) LOOP
+  6          total_employees := CountEmployeesByDept(dept_rec.Dept_Code);
+  7          DBMS_OUTPUT.PUT_LINE('Department: ' || dept_rec.Dept_Name || ', Total Employees: ' || total_employees);
+  8      END LOOP;
+  9  EXCEPTION
+ 10      WHEN OTHERS THEN
+ 11          DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+ 12  END;
+ 13  /
+Department: HR, Total Employees: 3
+Department: IT, Total Employees: 3
+
+PL/SQL procedure successfully completed.
+
+
+QUESTION....
+
+
+Desirable List (Practical) 
+1 Use following tables and do as directed:  
+Movie (movie_id, movie name, date_of_release) 
+www.ljku.edu.in July-Dec2024 
+ 
+ 
+ Screen (screen_id, location, max_capacity)  
+Current (movie_id,screen_id, date_of_arrival, date_of_closure) 
+ 1. Consider the above table and write a function to return the movie name which arrived 
+today. . 
+                           
+
+
+ANSWER...
+
+
+SQL> CREATE OR REPLACE FUNCTION GetMoviesArrivedToday
+  2  RETURN VARCHAR2 AS
+  3      movie_names VARCHAR2(4000);
+  4  BEGIN
+  5      SELECT LISTAGG(m.movie_name, ', ') WITHIN GROUP (ORDER BY m.movie_name)
+  6      INTO movie_names
+  7      FROM Movie m
+  8      JOIN Current5 c ON m.movie_id = c.movie_id
+  9      WHERE c.date_of_arrival = TRUNC(SYSDATE);
+ 10
+ 11      IF movie_names IS NULL THEN
+ 12          RETURN 'No movies arrived today.';
+ 13      ELSE
+ 14          RETURN movie_names;
+ 15      END IF;
+ 16  EXCEPTION
+ 17      WHEN OTHERS THEN
+ 18          RETURN 'An error occurred: ' || SQLERRM;
+ 19  END GetMoviesArrivedToday;
+ 20  /
+
+Function created.
+
+SQL> DECLARE
+  2      movies_today VARCHAR2(4000);
+  3  BEGIN
+  4      movies_today := GetMoviesArrivedToday();
+  5      DBMS_OUTPUT.PUT_LINE('Movies that arrived today: ' || movies_today);
+  6  END;
+  7  /
+Movies that arrived today: Avatar, Interstellar
+
+PL/SQL procedure successfully completed.

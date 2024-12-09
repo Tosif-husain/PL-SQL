@@ -1,0 +1,70 @@
+SQL> desc emp_mstr;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ E_ID                                      NOT NULL NUMBER(2)
+ FIRST_NAME                                         VARCHAR2(30)
+ LAST_NAME                                          VARCHAR2(30)
+ SALARY                                             NUMBER(8,2)
+
+SQL> select *from emp_mstr;
+
+      E_ID FIRST_NAME                     LAST_NAME                          SALARY
+---------- ------------------------------ ------------------------------ ----------
+         1 Ruchita                        Vyas                                 5000
+         2 Komal                          Trivedi                             15000
+         3 Vikas                          Gokhale                             10000
+         4 Nikunj                         Patel                                2000
+         5 Manish                         Shah                                12000
+
+*****************************************************************************************************************
+Create a function which can show first name of a given employee. Employee no should be entered by the user.
+*****************************************************************************************************************
+CREATE or REPLACE FUNCTION fun1(no in number) 
+RETURN varchar2
+IS
+    name varchar2(20);
+BEGIN
+    select first_name into name from emp_mstr where e_id = no;
+    return name;
+END;
+*****************************************************************************************************************
+DECLARE
+	no number :=&no;
+	name varchar2(20);
+BEGIN
+	name := fun1(no);
+	dbms_output.put_line('*************************');
+	dbms_output.put_line('Employee Details: ');
+	dbms_output.put_line('*************************');
+	dbms_output.put_line('Name:'||'   '||name);
+	dbms_output.put_line('*************************');
+EXCEPTION
+	when no_data_found then
+		dbms_output.put_line('No Record Found');
+end;
+*****************************************************************************************************************
+Output:
+*****************************************************************************************************************
+Enter value for no: 2
+old   2:  no number :=&no;
+new   2:  no number :=2;
+*************************
+Employee Details:
+*************************
+Name:   Komal
+*************************
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+
+Enter value for no: 12
+old   2:  no number :=&no;
+new   2:  no number :=12;
+No Record Found
+
+PL/SQL procedure successfully completed.
+
+Commit complete.
+********************************************
+

@@ -1,0 +1,19 @@
+DECLARE
+
+         n_sal emp.salary%type;
+         v_empno emp.empno%type;
+         v_empname emp.ename%type;
+
+  BEGIN
+
+        v_empno:=&empno;
+
+      	select ename,salary into v_empname,n_sal 
+      	from acct_mstr 
+      	where empno=v_empno;
+
+        dbms_output.put_line('Employee Number : '||v_empno);
+        dbms_output.put_line('Employee Name : '||v_empname);
+        dbms_output.put_line('Salary: '||to_char(n_sal));
+
+END;

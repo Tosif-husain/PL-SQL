@@ -1,0 +1,11 @@
+Conditional Control
+
+Syntax:
+
+IF <condition> then
+	<action>
+ELSEIF <condition> then
+	<action>
+ELSE
+	<action>
+END IF;

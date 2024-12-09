@@ -1,0 +1,64 @@
+SQL> set serveroutput on;
+SQL> set autocommit on;
+SQL> desc emp_information;
+ Name                                                              Null?    Type
+ ----------------------------------------------------------------- -------- --------------------------------------------
+ EMP_NO                                                            NOT NULL NUMBER(2)
+ EMP_NAME                                                                   VARCHAR2(40)
+ EMP_DEPT                                                                   VARCHAR2(40)
+ EMP_SALARY                                                                 VARCHAR2(5)
+
+SQL> select *from emp_information;
+
+    EMP_NO EMP_NAME                                 EMP_DEPT                                 EMP_S
+---------- ---------------------------------------- ---------------------------------------- -----
+         1 Ruchita Vyas                             Web Developer                            45K
+         2 Komal Vyas                               Program Developer                        38K
+         3 Kavya Patel                              Program Developer                        32K
+         4 Ravi Shastri                             Web Developer                            21K
+*************************************************************************************************
+Parameterized Cursor
+*************************************************************************************************
+DECLARE
+    tmp e_information%ROWTYPE;
+    no NUMBER;
+    CURSOR c214(no NUMBER) IS 
+        SELECT * FROM e_information WHERE emp_no = no;
+BEGIN
+    no := &no;
+
+    OPEN c214(no);
+    FETCH c214 INTO tmp;
+
+    IF c214%FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('***************************');
+        DBMS_OUTPUT.PUT_LINE('Employee Details');
+        DBMS_OUTPUT.PUT_LINE('***************************');
+        DBMS_OUTPUT.PUT_LINE('EMP_No:    ' || tmp.emp_no);
+        DBMS_OUTPUT.PUT_LINE('EMP_Name:  ' || tmp.emp_name);
+        DBMS_OUTPUT.PUT_LINE('EMP_Dept:  ' || tmp.emp_dept);
+        DBMS_OUTPUT.PUT_LINE('EMP_Salary:' || tmp.emp_salary);
+        DBMS_OUTPUT.PUT_LINE('***************************');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Record does not exist');
+    END IF;
+
+    CLOSE c214;
+END;***********************************************************************************************
+Output:
+***********************************************************************************************
+Enter value for no: 1
+old   6:  no:=&no;
+new   6:  no:=1;
+***************************
+Employee Details
+***************************
+EMP_No:    |1
+EMP_Name:  |Ruchita Vyas
+EMP_Dept:  |Web Developer
+EMP_Salary:|45K
+***************************
+
+PL/SQL procedure successfully completed.
+
+Commit complete.

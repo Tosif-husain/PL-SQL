@@ -1,0 +1,87 @@
+program to implement NO_DATA_FOUND
+
+
+
+
+DECLARE
+   temp varchar(20);
+  
+BEGIN
+   SELECT e_id into temp from emp_mstr where FIRST_NAME='abc';
+  
+exception
+   WHEN no_data_found THEN
+      dbms_output.put_line('ERROR');
+      dbms_output.put_line('there is no name as');
+      dbms_output.put_line('abc in emp table');
+end;
+
+
+
+
+
+
+
+
+
+
+program to mimplement TOO_MANY_ROWS
+
+
+
+DECLARE
+   temp varchar(20);
+  
+BEGIN
+  
+
+   SELECT FIRST_NAME into temp from emp_mstr;
+   dbms_output.put_line(temp);
+
+  EXCEPTION
+   WHEN too_many_rows THEN
+      dbms_output.put_line('error trying to SELECT too many rows');
+  
+
+end;
+
+
+
+program to implement VALUE_ERROR
+
+DECLARE
+   temp number;   
+  
+BEGIN
+   SELECT FIRST_NAME  into temp from emp_mstr where FIRST_NAME='John';
+   dbms_output.put_line('the e_name is '||temp);
+  
+EXCEPTION
+   WHEN value_error THEN
+   dbms_output.put_line('Error');
+   dbms_output.put_line('Change data type of temp to varchar(20)');
+  
+END;
+
+
+
+
+
+
+
+
+DECLARE
+   a int:=10;
+   b int:=0;
+   answer int;
+  
+BEGIN
+   answer:=a/b;
+   dbms_output.put_line('the result after division is'||answer);
+  
+exception
+   WHEN zero_divide THEN
+      dbms_output.put_line('dividing by zero please check the values again');
+      dbms_output.put_line('the value of a is '||a);
+      dbms_output.put_line('the value of b is '||b);
+END;

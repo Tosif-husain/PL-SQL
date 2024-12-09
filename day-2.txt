@@ -1,0 +1,63 @@
+QUESTION...
+
+
+Essential List (Practical) 
+1 1. Create the above four tables along with key constraints. 2. Write an Insert script for 
+insertion of rows with substitution variables 3. Insert appropriate data 
+2 Add a column – “color” to the Item table.  
+1. Display the column Item name and Price in sentence form using Concatenation. 
+
+
+ANSWER...
+
+
+SQL> ALTER TABLE ITEM
+  2  ADD color VARCHAR(20);
+
+Table altered.
+
+SQL> SELECT 'The item ' || itemname || ' costs $' || itemprice AS "Item Description"
+  2  FROM ITEM;
+
+Item Description
+-----------------------------------------------------------------------------------------------------------
+The item Laptop costs $1000
+The item Mouse costs $20
+The item Keyboard costs $50
+
+
+QUESTION...
+
+
+Desirable List (Practical): 
+1 . Display all the records of EMP table  
+ Display all the records of DEPT table  
+ Display only Name of all employees  
+ Display Employee’s Name and salary  
+Display only unique departments (deptno) from EMP table
+
+
+ANSWER...
+
+
+SQL> SELECT * FROM DEPT11;
+
+no rows selected
+
+SQL>
+SQL> SELECT ename FROM EMP11;
+
+no rows selected
+
+SQL>
+SQL> SELECT ename, sal FROM EMP11;
+
+no rows selected
+
+SQL>
+SQL> SELECT DISTINCT deptno FROM EMP11;
+
+no rows selected
+
+
+

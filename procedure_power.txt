@@ -1,0 +1,26 @@
+Implement a named procedure which takes as input two numbers and 
+displays power (x,y) without using inbuit functions.
+************************************************************************
+create or replace procedure mypower(x in number,y in number) as
+    i number:=1;
+    j number:=1;
+begin
+    if y = 0 then
+    	dbms_output.put_line('1');
+    elsif y < 0 then
+    	dbms_output.put_line('Negative number not allowed');
+    else
+   	for i in 1..y loop
+   		j:=j* x;
+   	end loop;
+   dbms_output.put_line(j);
+   end if;
+end;
+************************************************************************
+/
+Procedure created.
+************************************************************************
+SQL> call mypower(2,3);
+8
+
+Call completed.
